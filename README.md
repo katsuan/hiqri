@@ -29,8 +29,6 @@ LIFF、Firebase Firestore、PeerJS を使った 2 人対戦オセロです。
   - 教養モードの問題（ジャンルごとの JSON）と、その一覧 `index.json`
 - `scripts/update-version.sh`
   - コミット SHA から版情報を更新
-- `scripts/stamp-assets.sh`
-  - 公開時に index.html の js / css の URL に `?v=<コミット>` を付ける（LINE などで古いファイルが使われないように）
 - `scripts/build-question-index.sh`
   - `questions/*.json` の一覧 `questions/index.json` を作る
 
@@ -194,7 +192,7 @@ node --test test/
 
 ## GitHub Pages
 
-GitHub Pages を GitHub Actions 配信にしている場合、`.github/workflows/deploy-pages.yml` で版情報更新後にそのままデプロイします。
+main に push すると `.github/workflows/pages.yml`（中身は Q 共通の `katsuan/line-share` の `q-pages.yml`）が動き、テストと check-code が通ったときだけ、版情報と問題の一覧を作り、js / css の URL に `?v=` を付けて Pages に出します。落ちたら出しません。`?v=` は手で付けなくてかまいません。
 
 ## Firebase 利用方針
 
