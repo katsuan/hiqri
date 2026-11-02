@@ -161,7 +161,7 @@ LINE の中のブラウザが古い `index.html` を覚えていることがあ�
 - `js/main.js` → `js/card.js` と `app.js` を読む
 - `css/styles.css` → `css/page.css` を読む
 
-公開する前に、読み込むファイルの版（`?v=`）を `python3 ../q-oqrn/tools/qstamp.py index.html` で付け直します。
+公開は GitHub Actions（`.github/workflows/pages.yml`。中身は Q 共通の line-share の `q-pages.yml`）。push すると、テストと check-code が通ったときだけ Pages に出す。読みこむ JS・CSS の `?v=` は公開のときに付くので、手で付けなくてよい。
 
 ## 設定箇所
 
