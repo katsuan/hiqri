@@ -15,13 +15,14 @@ test("案内で「」に入れたボタン・欄の名前は、画面に同じ�
   assert.match(ui, /startLabel = !rulesReady \? startLabel : "▶ 待つ間 COM と練習する"/);
   assert.match(ui, /「▶ 待つ間 COM と練習する」で練習できます/);
   // 結果のボタン
-  assert.match(ui, /"🔁 もう一戦する"/);
-  assert.match(ui, /盤面の「🔁 もう一戦する」で続けられます/);
+  assert.match(ui, /"もう一戦する"/);
+  assert.match(ui, /盤面の「もう一戦する」で続けられます/);
   // 欄の名前
   assert.match(html, /<div class="setup-heading">対局の準備<\/div>/);
   assert.match(ui, /toolsSummary: "別のルームに参加 \/ 新しい対局"/);
   assert.match(html, /<summary id="roomToolsSummary">ルームIDで参加<\/summary>/);
-  assert.match(html, /👥 友だちと対戦/);
+  assert.match(html, /data-icon="team" aria-hidden="true"><\/span>友だちと対戦/);
+  assert.match(read("js/session.js"), /「友だちと対戦」を押すと/);
 });
 
 test("もうない操作（新しいルームを作成・ページを開き直す）を、続けかたとして案内しない", () => {

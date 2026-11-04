@@ -10,6 +10,27 @@
     }
   }
 
+  // ボタンの「線アイコン＋する言葉」（Q キットの ls-icon）。iconName が空なら文字だけ。同じ中身なら書き直さない
+  function setLabel(element, iconName, text) {
+    if (!element) {
+      return;
+    }
+    var key = iconName + "|" + text;
+    if (element.getAttribute("data-label") === key) {
+      return;
+    }
+    element.setAttribute("data-label", key);
+    element.textContent = "";
+    if (iconName) {
+      var icon = document.createElement("span");
+      icon.className = "ls-icon";
+      icon.setAttribute("data-icon", iconName);
+      icon.setAttribute("aria-hidden", "true");
+      element.appendChild(icon);
+    }
+    element.appendChild(document.createTextNode(text));
+  }
+
   // 文字を HTML に入れても、タグとして動かない形にする（js/tex.js と同じものを使う）
   function esc(value) {
     return window.OthelloTex.escapeHtml(value);
@@ -385,7 +406,7 @@
           (isPlaying && !app.game.winner ?
             "このまま続けられます。別の対局に移るときだけ「別のルームに参加 / 新しい対局」を使います。" :
             app.game.winner ?
-              (app.resultOverlayDismissed ? "下の「対局の準備」でルールを押すと、次の準備に移ります。" : "盤面の「🔁 もう一戦する」で続けられます。") :
+              (app.resultOverlayDismissed ? "下の「対局の準備」でルールを押すと、次の準備に移ります。" : "盤面の「もう一戦する」で続けられます。") :
               "下の「対局の準備」で盤面とルールを選んで START を押します。"),
         toolsSummary: "別のルームに参加 / 新しい対局",
         joinLabel: "別のルームに参加",
@@ -451,7 +472,7 @@
         "対局が終わりました。" :
         "いま対局中です。",
       hint: app.game.winner ?
-        (!app.resultOverlayDismissed ? "盤面の「🔁 もう一戦する」で続けられます。" :
+        (!app.resultOverlayDismissed ? "盤面の「もう一戦する」で続けられます。" :
           app.role === "host" ? "下の「対局の準備」でルールを押すと、次の準備に移ります。" :
           "ホストが次の対局を準備すると、ここで続けられます。") :
         "手番と置ける場所は盤面に表示しています。",
@@ -802,7 +823,8 @@
       setHidden(elements.quizWatchHead, !watching);
       setHidden(elements.quizGiveUp, watching);
       setHidden(elements.quizWatchPill, !(watching && !app.watchOpponent));
-      setText(elements.quizWatchTitle, app.opponentQuiz && app.opponentQuiz.byCom ? "🤖 COM が回答中…" : "👀 相手が回答中…");
+      setLabel(elements.quizWatchTitle, app.opponentQuiz && app.opponentQuiz.byCom ? "bot" : "view",
+        app.opponentQuiz && app.opponentQuiz.byCom ? "COM が回答中…" : "相手が回答中…");
       setText(elements.quizWatchPillText, app.opponentQuiz && app.opponentQuiz.byCom ? "COM が回答中…" : "相手が回答中…");
       if (prompt && prompt !== renderedQuizPrompt) {
         renderedQuizPrompt = prompt;
@@ -926,7 +948,8 @@
       setText(elements.resultScoreline, String(app.myColor === Game.BLACK ? counts.black : counts.white) + " - " +
         String(app.myColor === Game.BLACK ? counts.white : counts.black) + resultLives);
       // ボタンには、することを書く（「はい」「いいえ」にしない）
-      setText(elements.resultPrimaryButton, app.rematch.outgoing ? "返事を待っています…" : (app.rematch.incoming ? "🔁 再戦する" : "🔁 もう一戦する"));
+      setLabel(elements.resultPrimaryButton, app.rematch.outgoing ? "" : "refresh",
+        app.rematch.outgoing ? "返事を待っています…" : (app.rematch.incoming ? "再戦する" : "もう一戦する"));
       setText(elements.resultSecondaryButton, app.rematch.incoming ? "ことわる" : "閉じる");
       elements.resultPrimaryButton.disabled = !!app.rematch.outgoing;
     }
@@ -1136,7 +1159,7 @@
         setText(elements.roomStateHint, roomFlow.hint);
         setText(elements.roomToolsSummary, roomFlow.toolsSummary);
         setText(elements.joinRoomButton, roomFlow.joinLabel);
-        setText(elements.newRoomButton, roomFlow.newRoomLabel);
+        setLabel(elements.newRoomButton, "add", roomFlow.newRoomLabel);
         setText(elements.roomCurrentId, app.roomId ? ("ルームID: " + app.roomId) : "ルーム未作成");
         setLabelWithLives(elements.myLabel, getMyLabel(app), livesText(app, app.myColor || (app.localTwoPlayer ? Game.BLACK : "")));
         setLabelWithLives(elements.opponentLabel, getOpponentLabel(app),
@@ -1169,7 +1192,7 @@
         setHidden(elements.roomCurrentActions, !app.roomId || isSolo || (roomFlow.showShare && !app.reconnecting));
         if (elements.quickReconnectButton) {
           elements.quickReconnectButton.disabled = !app.roomId;
-          setText(elements.quickReconnectButton, app.reconnecting ? "再試行" : "再接続");
+          setLabel(elements.quickReconnectButton, "refresh", app.reconnecting ? "再試行" : "再接続");
           // 招待して待っている間は再接続の出番がないので隠す
           setHidden(elements.quickReconnectButton, roomFlow.showShare && !app.reconnecting);
         }

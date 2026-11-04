@@ -922,7 +922,7 @@
           // 招待をカードで送る
           onShareRoom: function () {
             if (!app.roomUrl) {
-              setMessage("先に「👥 友だちと対戦」を押すと、招待できます。");
+              setMessage("先に「友だちと対戦」を押すと、招待できます。");
               return;
             }
             Platform.shareRoom(app.roomId, app.roomUrl).then(function (result) {

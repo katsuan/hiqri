@@ -279,7 +279,7 @@
       '<p class="ls-hint outside-choice-text">友だちとの対戦は、下のどちらかで遊べます。COM との練習は、このまま遊べます。</p>' +
       '<a class="ls-outside-button is-app outside-choice-button" data-act="app">📱 LINE 版で開く</a>' +
       '<button class="ls-outside-button outside-choice-button" type="button" data-act="login">🔑 ログインして遊ぶ</button>' +
-      '<button class="ls-sheet-cancel" type="button" data-act="guest">🤖 ログインせずに練習する</button>' +
+      '<button class="ls-sheet-cancel" type="button" data-act="guest"><span class="ls-icon" data-icon="bot" aria-hidden="true"></span>ログインせずに練習する</button>' +
       "</div>";
     box.querySelector('[data-act="app"]').setAttribute("href", appUrl);
     box.querySelector('[data-act="login"]').addEventListener("click", function () {

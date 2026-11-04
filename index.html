@@ -52,30 +52,30 @@
           <!-- ルームがないときの主な2つの始め方。ルームIDでの参加は下の折りたたみ（補助的な操作） -->
           <div id="startChoices" class="start-choices">
             <button id="newFriendRoomButton" class="ls-button is-primary start-choice" type="button">
-              <span class="start-choice-title">👥 友だちと対戦</span>
+              <span class="start-choice-title"><span class="ls-icon" data-icon="team" aria-hidden="true"></span>友だちと対戦</span>
               <span class="start-choice-sub">LINEで招待する</span>
             </button>
             <button id="newComRoomButton" class="ls-button start-choice" type="button">
-              <span class="start-choice-title">🤖 COMと練習</span>
+              <span class="start-choice-title"><span class="ls-icon" data-icon="bot" aria-hidden="true"></span>COMと練習</span>
               <span class="start-choice-sub">ひとりですぐ遊ぶ</span>
             </button>
             <button id="newLocalRoomButton" class="ls-button start-choice" type="button">
-              <span class="start-choice-title">📱 1台で2人</span>
+              <span class="start-choice-title"><span class="ls-icon" data-icon="app" aria-hidden="true"></span>1台で2人</span>
               <span class="start-choice-sub">1台を交代で</span>
             </button>
           </div>
           <!-- 招待中は「LINEで招待」をいちばん上に。ルームIDは LINE 以外で伝えたいとき用 -->
           <div id="roomActionRow" class="button-row room-action-row hidden">
-            <button id="shareButton" class="ls-button is-primary" type="button">💬 LINEで招待</button>
+            <button id="shareButton" class="ls-button is-primary" type="button"><span class="ls-icon" data-icon="message-circle" aria-hidden="true"></span>LINEで招待</button>
             <div id="roomActionNote" class="room-action-note hidden">このルームでそのまま進めます。</div>
           </div>
           <!-- ルームIDとコピーは1行に（スマホで縦に場所を取らない） -->
           <div id="roomCurrentRow" class="room-current-row hidden">
             <div id="roomCurrentId" class="room-current-id">room-xxxxxx</div>
-            <button id="copyRoomIdButton" class="ls-button" type="button">📋 コピー</button>
+            <button id="copyRoomIdButton" class="ls-button" type="button"><span class="ls-icon" data-icon="copy" aria-hidden="true"></span>コピー</button>
           </div>
           <div id="roomCurrentActions" class="button-row room-current-actions hidden">
-            <button id="quickReconnectButton" class="ls-button" type="button">🔄 再接続する</button>
+            <button id="quickReconnectButton" class="ls-button" type="button"><span class="ls-icon" data-icon="refresh" aria-hidden="true"></span>再接続</button>
           </div>
         </div>
         <details id="roomTools" class="ls-fold room-tools">
@@ -89,7 +89,7 @@
               </div>
             </div>
             <div class="room-tools-actions">
-              <button id="newRoomButton" class="ls-button" type="button">＋ 新しい対局を作る</button>
+              <button id="newRoomButton" class="ls-button" type="button"><span class="ls-icon" data-icon="add" aria-hidden="true"></span>新しい対局を作る</button>
             </div>
           </div>
         </details>
@@ -130,7 +130,7 @@
                 <span class="host-setup-label">回答</span>
                 <div class="ls-chips">
                   <button class="ls-chip" aria-pressed="false" type="button" data-answer-mode="choice">4択</button>
-                  <button class="ls-chip" aria-pressed="false" type="button" data-answer-mode="input">✏️ 入力</button>
+                  <button class="ls-chip" aria-pressed="false" type="button" data-answer-mode="input"><span class="ls-icon" data-icon="edit" aria-hidden="true"></span>入力</button>
                 </div>
               </div>
               <div id="answerModeNote" class="small host-setup-hint hidden">入力：漢字の読み（ひらがな）・数学・一般教養は文字で答えます。英単語・ことわざ・四字熟語の意味は4択のままです。</div>
@@ -198,7 +198,7 @@
         <div id="reconnectNotice" class="status-banner hidden">
           <div id="reconnectText">接続状態を確認しています。</div>
           <div class="ls-actions">
-            <button id="retryReconnectButton" class="ls-button" type="button">🔄 再接続する</button>
+            <button id="retryReconnectButton" class="ls-button" type="button"><span class="ls-icon" data-icon="refresh" aria-hidden="true"></span>再接続する</button>
             <button id="reloadButton" class="ls-button" type="button">最初から開きなおす</button>
           </div>
         </div>
@@ -217,7 +217,7 @@
             <div class="ls-sheet-card quiz-card">
               <!-- 相手が答えているときだけ出す（見るだけ。「隠す」で以後は出さない） -->
               <div id="quizWatchHead" class="quiz-watch-head hidden">
-                <span id="quizWatchTitle">👀 相手が回答中…</span>
+                <span id="quizWatchTitle"><span class="ls-icon" data-icon="view" aria-hidden="true"></span>相手が回答中…</span>
                 <button id="quizWatchHide" class="quiz-watch-toggle" type="button">隠す</button>
               </div>
               <div class="quiz-meta">
@@ -236,7 +236,7 @@
               <button id="quizGiveUp" class="ls-button quiz-give-up" type="button">わからない（相手の番にする）</button>
             </div>
           </div>
-          <button id="quizWatchPill" class="quiz-watch-pill hidden" type="button"><span id="quizWatchPillText">相手が回答中…</span><span>👀 見る</span></button>
+          <button id="quizWatchPill" class="quiz-watch-pill hidden" type="button"><span id="quizWatchPillText">相手が回答中…</span><span><span class="ls-icon" data-icon="view" aria-hidden="true"></span>見る</span></button>
           <div id="startOverlay" class="start-overlay hidden">
             <div class="start-card">
               <div id="startWord" class="start-word">START</div>
@@ -250,7 +250,7 @@
               <div id="resultCaption" class="result-caption">このルームで続けてもう一戦しますか？</div>
               <div id="resultScoreline" class="result-scoreline">0 - 0</div>
               <div class="ls-actions result-actions">
-                <button id="resultPrimaryButton" class="ls-button is-primary" type="button">🔁 もう一戦する</button>
+                <button id="resultPrimaryButton" class="ls-button is-primary" type="button"><span class="ls-icon" data-icon="refresh" aria-hidden="true"></span>もう一戦する</button>
                 <button id="resultSecondaryButton" class="ls-button" type="button">閉じる</button>
               </div>
               <!-- 対局の結果を、招待カードと同じ緑のカードで LINE に送る（js/platform.js の shareResult） -->

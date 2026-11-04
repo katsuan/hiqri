@@ -8,19 +8,19 @@
   // せまい画面では版の札をアイコンのシートに移すための印（css/page.css の .has-me）
   var HOST_CLASS = "has-me";
 
-  // シートの行（文字だけ。テストで中身を確かめる）。st：{ me（{ name, picture } か null）, loggedIn, version }
+  // シートの行（文字だけ。テストで中身を確かめる）。iconName は線アイコン（Q キットの ls-icon。シートはこちらを出す）、icon は前からの絵文字。st：{ me（{ name, picture } か null）, loggedIn, version }
   function rows(st) {
     var s = st || {};
     var name = s.me && s.me.name ? s.me.name : "";
     var list = [];
     if (s.loggedIn) {
-      list.push({ icon: "✅", text: (name ? name + " さん" : "LINE") + "でログインしています" });
-      list.push({ icon: "👥", text: "友だちとの対戦では、相手にこの名前とアイコンが見えます" });
+      list.push({ icon: "✅", iconName: "done", text: (name ? name + " さん" : "LINE") + "でログインしています" });
+      list.push({ icon: "👥", iconName: "team", text: "友だちとの対戦では、相手にこの名前とアイコンが見えます" });
     } else {
-      list.push({ icon: "👤", text: "まだ LINE にログインしていません。COM との練習と 1台で2人は、このまま遊べます" });
+      list.push({ icon: "👤", iconName: "user", text: "まだ LINE にログインしていません。COM との練習と 1台で2人は、このまま遊べます" });
     }
     if (s.version) {
-      list.push({ icon: "🏷️", text: "版 " + s.version });
+      list.push({ icon: "🏷️", iconName: "hash", text: "版 " + s.version });
     }
     return list;
   }
@@ -79,8 +79,9 @@
     rows({ me: st.me, loggedIn: st.loggedIn, version: version && version !== "----" ? version : "" }).forEach(function (row) {
       var li = document.createElement("li");
       var icon = document.createElement("span");
+      icon.className = "ls-icon";
+      icon.setAttribute("data-icon", row.iconName);
       icon.setAttribute("aria-hidden", "true");
-      icon.textContent = row.icon;
       var text = document.createElement("span");
       text.textContent = row.text;
       li.append(icon, text);

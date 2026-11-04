@@ -825,6 +825,14 @@
   opacity: 0.8;
 }
 
+/* 線アイコンと字を並べる所（相手が回答中・見る） */
+#quizWatchTitle,
+.quiz-watch-pill span + span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
 /* 教養モード：空いているマスに出す問題の1文字 */
 .cell-mark {
   position: absolute;
@@ -1101,5 +1109,11 @@
 
   .result-share-button {
     margin-top: 0;
+  }
+
+  /* 「もう一戦する」「閉じる」は横に並ばないので、縦に、横いっぱいで */
+  .result-actions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
   }
 }

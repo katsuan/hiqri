@@ -267,8 +267,23 @@ body.is-lobby .board-shell {
 }
 
 .start-choice-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px; /* 線アイコンと字の間 */
   font-size: 1rem;
   font-weight: 800;
+}
+
+/* せまい画面（320px など）では、名前が2行に折れないよう、アイコンと字の間を詰める */
+@media (max-width: 360px) {
+  .start-choice-title {
+    gap: 4px;
+  }
+
+  .start-choice-title .ls-icon {
+    width: 1.1em;
+    height: 1.1em;
+  }
 }
 
 .start-choice-sub {
@@ -293,6 +308,13 @@ body.is-lobby .board-shell {
 .outside-choice-text {
   margin-bottom: 8px;
   font-size: 14px;
+}
+
+.outside-choice .ls-sheet-cancel {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .outside-choice-button {
