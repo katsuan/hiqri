@@ -26,7 +26,7 @@ body {
   box-shadow: 0 0 0 3px rgba(31, 122, 69, 0.2);
 }
 
-/* 起動中（LINE ログイン・ルーム確認）は、始め方の欄と同じ大きさの読みこみ中の箱（平らな色。ゆっくり濃淡が動く）。
+/* 起動中（LINE ログイン・ルーム確認）は、始め方の欄と同じ大きさの読みこみ中の箱（Q キットの ls-skeleton と同じ見た目）。
    中身は見えないだけで場所をとっているので、読みこみが終わっても位置がずれない */
 .boot-note {
   position: absolute;
@@ -46,13 +46,9 @@ body.boot-loading .top-actions {
   position: relative;
   pointer-events: none;
   border-radius: var(--ls-radius-md);
-  background: var(--ls-surface-sub);
-  animation: boot-pulse 1.2s ease-in-out infinite alternate;
-}
-
-@keyframes boot-pulse {
-  from { opacity: 1; }
-  to { opacity: 0.6; }
+  background: linear-gradient(90deg, var(--ls-surface-sub) 25%, var(--ls-surface) 50%, var(--ls-surface-sub) 75%);
+  background-size: 200% 100%;
+  animation: ls-skeleton 1.2s linear infinite;
 }
 
 body.boot-loading .top-actions > * {
@@ -151,7 +147,7 @@ body.is-lobby .board-shell {
   min-width: 0;
 }
 
-/* 状態（はじめる / 招待中 / ひとりで …）は札にせず、うすい小さな字で見出しと同じ行に置く */
+/* 状態（はじめる / 招待中 / ひとりで …）は小さなラベルにして、見出しと同じ行に置く */
 .room-state-head {
   display: flex;
   align-items: center;
@@ -160,9 +156,12 @@ body.is-lobby .board-shell {
 }
 
 .room-state-label {
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(29, 42, 34, 0.07);
   color: var(--ls-subtext);
   font-size: 0.72rem;
-  font-weight: 700;
+  font-weight: 800;
   white-space: nowrap;
 }
 
@@ -256,25 +255,15 @@ body.is-lobby .board-shell {
   grid-column: 1 / -1;
 }
 
-/* 名前と説明は左にそろえる */
 .start-choice {
   display: grid;
   gap: 4px;
-  justify-content: stretch;
-  justify-items: start;
-  align-content: center;
+  justify-items: center;
   min-height: 84px;
-  padding: 16px;
+  padding: 16px 8px;
   border-radius: 16px;
-  text-align: left;
+  text-align: center;
   white-space: normal;
-}
-
-/* せまい画面（320px など）では、名前が2行に折れないよう左右を詰める */
-@media (max-width: 360px) {
-  .start-choice {
-    padding: 16px 8px;
-  }
 }
 
 .start-choice-title {
@@ -295,9 +284,10 @@ body.is-lobby .board-shell {
 }
 
 .outside-choice-card {
-  justify-items: start;
+  justify-items: center;
   gap: 8px;
   width: min(100%, 360px);
+  text-align: center;
 }
 
 .outside-choice-text {
