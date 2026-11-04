@@ -41,7 +41,7 @@ LIFF、Firebase Firestore、PeerJS を使った 2 人対戦オセロです。
 - 友だちを待っている間は、盤面に「友だちを待っています」とアニメーションを出します。ホストは待つ間に START で COM と練習できます（ルームは開いたまま招待も続けられる）
 - 練習中に友だちが参加したら、ホストは「友だちと最初から対戦」か「今の盤面を友だちと続ける」を選びます。選ぶまで、友だちはホストの盤面を見て待ちます
 - 友だちが参加すると、ホストの画面にお知らせを出します（振動・短い音・別のタブを見ているときはタブの題名でも知らせる）
-- OGP（`assets/ogp.png`）とアイコン（`assets/favicon.svg` ほか）は `assets/` にあります
+- OGP（`assets/ogp.png`）とアイコン（`assets/icon.svg` ほか）は `assets/` にあります
 - 始めるまでの流れ：入口で遊び方を選ぶ（この時点では盤面は出さない）→「対局の準備」で 対戦相手 → 盤面 → ルール（→ 問題）→ 色 の順に決める → 準備の一番下の START（盤面の上にも同じ START を出し、どちらを押しても始まる）。友だち対戦は「LINEで招待」をいちばん上に出し、2人そろったら両方が START を押します
 
 ## 教養モード
@@ -77,7 +77,6 @@ LIFF、Firebase Firestore、PeerJS を使った 2 人対戦オセロです。
 {
   "id": "history",
   "label": "日本史",
-  "icon": "🏯",
   "iconName": "book-open",
   "order": 50,
   "levels": [
@@ -102,7 +101,7 @@ LIFF、Firebase Firestore、PeerJS を使った 2 人対戦オセロです。
 ```
 
 - `id`：ジャンルの id（ルールに残るので、公開後は変えない）。数学の `math` や、ほかのファイルと同じ id は読み飛ばします
-- `iconName`：問題を選ぶ欄と問題のシートの頭に出す線アイコンの名前（Q キットの `ls-icon` の名前。Q キットにない形は `assets/icons/` に Lucide の絵を置き、`css/board.css` の「ジャンルの線アイコン」に足す。今は漢字 `edit`・英単語 `languages`・ことわざ `scroll`・一般教養 `globe`・数学 `calculator`、書かないと `book-open`）。`icon`（絵文字）は前からのもので、今は画面に出さない
+- `iconName`：問題を選ぶ欄と問題のシートの頭に出す線アイコンの名前（Q キットの `ls-icon` の名前。Q キットにない形は `assets/icons/` に Lucide の絵を置き、`css/board.css` の「ジャンルの線アイコン」に足す。今は漢字 `edit`・英単語 `languages`・ことわざ `scroll`・一般教養 `globe`・数学 `calculator`、書かないと `book-open`）
 - `order`：並び順（小さいほど上。今は漢字 10・英単語 20・ことわざ 30・一般教養 40、数学はいつも最後）
 - `type: "choices"`：問題ごとに答え `a` とまちがい `w`（3つ以上）を書きます。`m` は盤面に出す1文字（正解にだけ入る字は避ける）
 - `type: "pairs"`：[問い, 答え] の組。まちがいは同じレベルの別の組の答えから選びます（4組以上必要）。`template` の `{q}` に問いが入ります。`mark` は `rare-kanji`（そのレベルでいちばん珍しい漢字）か `first-letter`（頭文字）

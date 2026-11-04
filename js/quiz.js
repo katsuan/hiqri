@@ -4,7 +4,7 @@
 (function (window) {
   // ジャンルとレベル。数学はその場で計算して作るので組み込み、それ以外は questions/*.json から読み込む（load）
   //   level.type: "pairs"（[問い, 答え] の組）/ "choices"（{ q, a, w: [まちがい3つ], m }）/ "math"
-  var MATH_GENRE = { id: "math", label: "数学", icon: "🧮", iconName: "calculator", order: 90, levels: [
+  var MATH_GENRE = { id: "math", label: "数学", iconName: "calculator", order: 90, levels: [
     { id: "e", label: "小学", type: "math" }, { id: "j", label: "中学", type: "math" },
     { id: "h", label: "高校", type: "math" }, { id: "u", label: "大学（微積）", type: "math" }
   ] };
@@ -88,7 +88,6 @@
     return {
       id: raw.id,
       label: raw.label,
-      icon: isText(raw.icon) ? raw.icon : "📘",
       // 画面に出す線アイコンの名前（Q キットの ls-icon。Q キットにない形は assets/icons/ と css/board.css）
       iconName: isText(raw.iconName) ? raw.iconName : "book-open",
       order: Number(raw.order) || 50,
@@ -168,9 +167,8 @@
     return pick.genre + ":" + pick.level;
   }
 
-  // 以前の形式 { genre, level } も読めるようにする
+  // 選んだ問題の並び。以前の { genre, level } 形式も読む。何も選んでいなければ空（教養モードは問題を選ぶまで始められない）
   function normalizePicks(input) {
-    // 以前の { genre, level } 形式も読む。何も選んでいなければ空（教養モードは問題を選ぶまで始められない）
     var raw = Array.isArray(input.picks) ? input.picks : (input.genre ? [{ genre: input.genre, level: input.level }] : []);
     var seen = {};
     var picks = [];
@@ -569,7 +567,6 @@
     return order;
   }
 
-  // 数学：その組み合わせで重ならない問題を count 問、種から順に作っておく
   var mathLists = {};
 
   // 数学：その組み合わせで重ならない問題を count 問、種から順に作っておく
@@ -670,11 +667,6 @@
       pickLabel: describePick(pick),
       canInput: entry.math ? true : !!levelOf(pick).input
     });
-  }
-
-  // 盤面に出す1文字
-  function markFor(rules, row, col, attempt, position) {
-    return questionFor(rules, row, col, attempt, position).mark || "";
   }
 
   // そのマスでいま出す問題の山の位置（retries[マス] = 不正解のたびに割り当てた位置の列）
@@ -783,7 +775,6 @@
     togglePick: togglePick,
     hasPick: hasPick,
     questionFor: questionFor,
-    markFor: markFor,
     newSeed: newSeed,
     comAccuracy: comAccuracy
   };

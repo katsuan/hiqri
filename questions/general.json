@@ -2,7 +2,6 @@
   "id": "general",
   "label": "一般教養",
   "order": 40,
-  "icon": "🌏",
   "iconName": "globe",
   "levels": [
     {
