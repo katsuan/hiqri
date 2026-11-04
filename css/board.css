@@ -151,7 +151,7 @@
 
 .start-overlay {
   background: rgba(18, 28, 22, 0.45);
-  }
+}
 
 .start-card,
 .result-card {
@@ -569,20 +569,7 @@
 }
 
 @media (max-width: 640px) {
-  .board-shell,
-  .sidebar {
-    padding: 16px;
-  }
-
-  .board-head {
-    gap: 8px;
-  }
-
   .host-setup-grid {
-    gap: 8px;
-  }
-
-  .host-setup-slot {
     gap: 8px;
   }
 
@@ -606,9 +593,6 @@
 
   .player-label {
     font-size: 0.68rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
 
   .player-score {
@@ -676,10 +660,6 @@
   gap: 8px;
 }
 
-#quizRuleRows.hidden {
-  display: none;
-}
-
 .rule-summary,
 .rule-badge {
   margin-top: 8px;
@@ -707,7 +687,11 @@
   padding: 16px;
 }
 
+/* 問題のシートの頭（ジャンル）：線アイコン＋名前 */
 .quiz-genre {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-size: 0.8rem;
   font-weight: 700;
   opacity: 0.7;
@@ -791,11 +775,6 @@
   color: #2f6b4a;
 }
 
-.quiz-watch-head.hidden,
-.quiz-watch-pill.hidden {
-  display: none;
-}
-
 .quiz-watch-toggle {
   padding: 4px 8px;
   border: 1px solid rgba(0, 0, 0, 0.15);
@@ -827,17 +806,17 @@
   cursor: pointer;
 }
 
-.quiz-watch-pill span + span {
-  margin-left: 8px;
-  opacity: 0.8;
-}
-
 /* 線アイコンと字を並べる所（相手が回答中・見る） */
 #quizWatchTitle,
 .quiz-watch-pill span + span {
   display: inline-flex;
   align-items: center;
   gap: 8px;
+}
+
+.quiz-watch-pill span + span {
+  margin-left: 8px;
+  opacity: 0.8;
 }
 
 /* 教養モード：空いているマスに出す問題の1文字 */
@@ -905,13 +884,6 @@
   color: var(--ls-subtext);
 }
 
-/* 問題のシートの頭（ジャンル）も線アイコン＋名前 */
-.quiz-genre {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
 /* ジャンルの線アイコン：Q キットにまだない形（Lucide。assets/icons/LICENSE）。Q キットに入ったら消す。
    変数（--ls-i）に入れると Q キットの ui.css の場所から読まれるので、絵はここで直接 mask-image に */
 .ls-icon[data-icon="languages"] { -webkit-mask-image: url("../assets/icons/languages.svg"); mask-image: url("../assets/icons/languages.svg"); }
@@ -924,7 +896,6 @@
 @media (max-width: 420px) {
   .pick-row {
     grid-template-columns: 5.6em minmax(0, 1fr);
-    gap: 8px;
   }
 
   .pick-genre {
@@ -938,10 +909,6 @@
     min-height: 34px;
     padding: 0 8px;
     font-size: 0.8rem;
-  }
-
-  .pick-row .ls-chips {
-    gap: 8px;
   }
 }
 
@@ -993,10 +960,6 @@
 .quiz-countdown.is-hurry {
   background: #fbe9e9;
   color: #c24141;
-}
-
-.quiz-countdown.hidden {
-  display: none;
 }
 
 /* ライフ（カードの名前の横） */
@@ -1068,10 +1031,6 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 8px;
-}
-
-.quiz-input.hidden {
-  display: none;
 }
 
 /* 入力欄は Q キットの ls-input（16px 以上なので iPhone で拡大されない） */
