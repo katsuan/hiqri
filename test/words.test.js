@@ -6,20 +6,21 @@ const fs = require("node:fs");
 const path = require("node:path");
 
 const read = (file) => fs.readFileSync(path.join(__dirname, "..", file), "utf8");
-const all = () => ["index.html", "app.js", "js/ui.js", "js/play.js", "js/session.js", "js/platform.js"].map(read).join("\n");
+const all = () => ["index.html", "app.js", "js/ui.js", "js/room-text.js", "js/play.js", "js/session.js", "js/platform.js"].map(read).join("\n");
 
 test("案内で「」に入れたボタン・欄の名前は、画面に同じ名前である", () => {
   const ui = read("js/ui.js");
+  const text = read("js/room-text.js");
   const html = read("index.html");
   // 友だち待ちの START の文字
   assert.match(ui, /startLabel = !rulesReady \? startLabel : "▶ 待つ間 COM と練習する"/);
   assert.match(ui, /「▶ 待つ間 COM と練習する」で練習できます/);
   // 結果のボタン
   assert.match(ui, /"もう一戦する"/);
-  assert.match(ui, /盤面の「もう一戦する」で続けられます/);
+  assert.match(text, /盤面の「もう一戦する」で続けられます/);
   // 欄の名前
   assert.match(html, /<div class="setup-heading">対局の準備<\/div>/);
-  assert.match(ui, /toolsSummary: "別のルームに参加 \/ 新しい対局"/);
+  assert.match(text, /toolsSummary: "別のルームに参加 \/ 新しい対局"/);
   assert.match(html, /<summary id="roomToolsSummary">ルームIDで参加<\/summary>/);
   assert.match(html, /data-icon="team" aria-hidden="true"><\/span>友だちと対戦/);
   assert.match(read("js/session.js"), /「友だちと対戦」を押すと/);
@@ -32,7 +33,7 @@ test("もうない操作（新しいルームを作成・ページを開き直�
 });
 
 test("結果を閉じたあとの知らせは、画面に出る（知らせの欄に出す言葉に入っている）", () => {
-  assert.match(read("js/ui.js"), /\|結果を閉じ\|/);
+  assert.match(read("js/room-text.js"), /\|結果を閉じ\|/);
   assert.match(read("js/session.js"), /"結果を閉じました。/);
 });
 

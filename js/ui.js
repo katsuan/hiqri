@@ -2,6 +2,7 @@
 // session.js が create(document) で作り、render(app) で描きなおし、bind(handlers) でボタンをつなぐ
 (function (window, document) {
   var Game = window.OthelloGame;
+  var RoomText = window.OthelloRoomText;
 
   // 要素の文字を変える（要素がなければ何もしない）
   function setText(element, value) {
@@ -89,213 +90,6 @@
     boardElement.appendChild(fragment);
   }
 
-  // スマホのせまい画面か
-  function isCompactMobile() {
-    return window.innerWidth <= 640;
-  }
-
-  // 友だちとつながっていて、まだ対局を始めていないか
-  function isHumanP2PSetup(app) {
-    return app.opponentMode === "human" &&
-      app.transportMode === "p2p" &&
-      !app.matchConfigured &&
-      !app.game.lastMove &&
-      !app.game.winner;
-  }
-
-  // 1台で2人：カードは「黒の人（先手）」「白の人（後手）」として見せる
-  function localName(color) {
-    return color === Game.WHITE ? "白の人" : "黒の人";
-  }
-
-  // 自分のカードの見出し（せまい画面では短く）
-  function getMyLabel(app) {
-    if (app.localTwoPlayer) {
-      return "先手 (黒)";
-    }
-    var label = isCompactMobile() ? "私" : "あなた (You)";
-    if (app.myColor) {
-      return label + " (" + Game.colorName(app.myColor) + ")";
-    }
-    return label;
-  }
-
-  // 相手のカードの見出し
-  function getOpponentLabel(app) {
-    if (app.localTwoPlayer) {
-      return "後手 (白)";
-    }
-    var label = app.opponentMode === "com" ? "COM" : (isCompactMobile() ? "相手" : "対戦相手");
-    if (app.myColor) {
-      return label + " (" + Game.colorName(Game.getOpponent(app.myColor)) + ")";
-    }
-    return label;
-  }
-
-  // 相手の名前（まだいなければ「参加待ち」）
-  function getOpponentName(app) {
-    if (app.staleGuest) {
-      return "参加待ち";
-    }
-    if (app.localTwoPlayer) {
-      return localName(Game.WHITE);
-    }
-    if (app.opponentDisplayName) {
-      return app.opponentDisplayName;
-    }
-    if (app.opponentMode === "com") {
-      return "COM";
-    }
-    if (app.roomData && ((app.role === "host" && app.roomData.guestUserId) || (app.role === "guest" && app.roomData.hostUserId))) {
-      return "対戦相手";
-    }
-    return "参加待ち";
-  }
-
-  // 自分のカードの下の様子（手番・START 待ち・結果など）
-  function getMyStatusText(app) {
-    var outcome;
-    var isMyTurn;
-
-    if (app.spectatorMode) {
-      return "観戦中";
-    }
-    if (app.resumePending) {
-      return "再開方法を選択中";
-    }
-    if (isHumanP2PSetup(app) || isHostWaiting(app)) {
-      return app.localStartReady ? "準備OK" : "START 待ち";
-    }
-    if (app.opponentMode === "com" && !app.matchConfigured && !app.game.lastMove && !app.game.winner) {
-      return "START 待ち";
-    }
-    if (app.game.winner && app.myColor) {
-      outcome = Game.outcomeForColor(app.game.winner, app.myColor);
-      if (outcome === "win") {
-        return "勝ちました";
-      }
-      if (outcome === "lose") {
-        return "負けました";
-      }
-      return "引き分け";
-    }
-    if (app.matchConfigured && app.myColor && app.game.currentTurn) {
-      isMyTurn = app.game.currentTurn === app.myColor;
-      if (app.localTwoPlayer) {
-        return isMyTurn ? "打つ番です" : "待っています";
-      }
-      return isMyTurn ? "あなたの手番" : "相手の手番";
-    }
-    return app.role ? "準備中" : "待機中";
-  }
-
-  // 自分のつながりの様子（オンライン・再接続中など）
-  function getMyPresenceText(app) {
-    if (app.reconnecting) {
-      return "再接続中";
-    }
-    if (app.spectatorMode) {
-      return "観戦中";
-    }
-    if (app.localTwoPlayer) {
-      return "この端末";
-    }
-    if (app.role) {
-      return AppPeer.isConnected() || app.opponentMode === "com" ? "オンライン" : "待機中";
-    }
-    return "接続前";
-  }
-
-  // 相手のつながりの様子
-  function getOpponentPresenceText(app) {
-    if (app.localTwoPlayer) {
-      return "この端末";
-    }
-    if (app.opponentMode === "com") {
-      return "COM";
-    }
-    if (app.resumePending) {
-      return "復帰済み";
-    }
-    if (app.spectatorMode) {
-      return "オンライン";
-    }
-    if (app.reconnecting) {
-      return "再接続中";
-    }
-    if (AppPeer.isConnected()) {
-      return "オンライン";
-    }
-    if (app.staleGuest) {
-      return "オフライン";
-    }
-    if (app.role === "host") {
-      if (app.roomData && app.roomData.guestUserId) {
-        return "オフライン";
-      }
-      return "未参加";
-    }
-    if (app.role === "guest") {
-      if (app.roomData && app.roomData.hostPeerId) {
-        return "接続待ち";
-      }
-      if (app.roomData && app.roomData.hostUserId) {
-        return "オフライン";
-      }
-      return "未参加";
-    }
-    return "未参加";
-  }
-
-  // 相手のカードの下の様子
-  function getOpponentStatusText(app) {
-    var opponentColor;
-    var opponentWon;
-
-    if (app.spectatorMode) {
-      return "選択待ち";
-    }
-    if (app.resumePending) {
-      return "返答待ち";
-    }
-    if (isHumanP2PSetup(app)) {
-      return app.remoteStartReady ? "準備OK" : "START 待ち";
-    }
-    if (app.game.winner && app.myColor) {
-      opponentColor = Game.getOpponent(app.myColor);
-      opponentWon = Game.outcomeForColor(app.game.winner, opponentColor);
-      if (opponentWon === "draw") {
-        return "引き分け";
-      }
-      return opponentWon === "win" ? "勝ちました" : "負けました";
-    }
-    if (app.matchConfigured && app.myColor && app.game.currentTurn) {
-      if (app.localTwoPlayer) {
-        return app.game.currentTurn === app.myColor ? "待っています" : "打つ番です";
-      }
-      if (app.opponentQuiz && app.game.currentTurn !== app.myColor) {
-        return "問題に回答中";
-      }
-      return app.game.currentTurn === app.myColor ? "あなたを待っています" : "手を選んでいます";
-    }
-    if (app.opponentMode === "com") {
-      return "START 待ち";
-    }
-    if (app.staleGuest) {
-      return "切断済み";
-    }
-    if (app.role === "host") {
-      if (app.roomData && app.roomData.guestUserId) {
-        return "接続待ち";
-      }
-      return "参加待ち";
-    }
-    if (app.role === "guest") {
-      return "接続待ち";
-    }
-    return app.status.opponent;
-  }
-
   // カードに石の色（黒・白）のクラスを付ける
   function setCardColorClass(element, color) {
     if (!element) {
@@ -308,236 +102,6 @@
     } else if (color === Game.WHITE) {
       element.classList.add("color-white");
     }
-  }
-
-  // 再接続の帯の文（あと何秒）
-  function getReconnectText(app) {
-    var remainingMs = Math.max(0, app.reconnectDeadline - Date.now());
-    var remainingSeconds = Math.max(1, Math.ceil(remainingMs / 1000));
-    return app.reconnectReason + " 相手との接続を戻しています。[あと" +
-      remainingSeconds + "秒待ち] 戻れなければ COM に切り替わります。";
-  }
-
-  // 知らせの箱を出すか（再接続中や、ほかの場所で見せているときは出さない）
-  function shouldShowMessageBox(app) {
-    if (!app.status.message || app.reconnecting) {
-      return false;
-    }
-
-    if (app.rematch.incoming || app.rematch.outgoing) {
-      return true;
-    }
-
-    if (/エラー|失敗|満室|見つかりません|コピー|送信|送り|送る|届け|つなが|できませんでした|うまく|終了|結果を閉じ|再戦|再接続|復帰|引き継|引継|観戦|置ける場所がありません/.test(app.status.message)) {
-      return true;
-    }
-
-    if (!app.roomId || app.status.mode === "ロビー" || app.status.mode === "マッチング") {
-      return false;
-    }
-
-    return false;
-  }
-
-  // ルームに友だちが入っているか
-  function hasJoinedOpponent(app) {
-    return app.opponentMode === "human" &&
-      !!app.roomData &&
-      !!app.roomData.guestUserId &&
-      !app.staleGuest;
-  }
-
-  // ルームの様子の欄に出すもの（状態の札・見出し・案内・招待のボタンを出すか）
-  function getRoomFlow(app) {
-    var joinedOpponent = hasJoinedOpponent(app);
-    var isPlaying = app.matchConfigured || !!app.game.lastMove;
-
-    if (!app.roomId) {
-      return {
-        label: "はじめる",
-        title: "だれと遊びますか？",
-        hint: "遊び方を選ぶと、次に盤面とルール（ふつう / 📚 教養）を決めて START します。",
-        toolsSummary: "ルームIDで参加",
-        joinLabel: "参加する",
-        newRoomLabel: "新しい対局を作る",
-        showCurrentRoom: false,
-        showShare: false,
-        actionNote: ""
-      };
-    }
-
-    if (app.practiceWhileWaiting) {
-      return {
-        label: "練習中",
-        title: app.game.winner ? "COM との練習が終わりました。" : "友だちを待つ間、COM と練習中です。",
-        hint: "友だちが参加したらお知らせします。そのあと、友だちと最初から対戦するか、今の盤面を続けるか選べます。",
-        toolsSummary: "別のルームに参加 / 新しい対局",
-        joinLabel: "別のルームに参加",
-        newRoomLabel: "別の対局を作る",
-        // 練習中も招待は続けられるようにする
-        showCurrentRoom: true,
-        showShare: true,
-        actionNote: ""
-      };
-    }
-
-    if (app.localTwoPlayer) {
-      return {
-        label: "1台で2人",
-        title: isPlaying && !app.game.winner ? "1台で2人で対局中です。" : "1台で2人で遊びます。",
-        hint: isPlaying && !app.game.winner ?
-          "手番の人が盤面をタップします。終わったら端末を相手に渡します。" :
-          "下の「対局の準備」で盤面とルールを選んで START を押します。黒の人から交代で打ちます。",
-        toolsSummary: "別のルームに参加 / 新しい対局",
-        joinLabel: "別のルームに参加",
-        newRoomLabel: "別の対局を作る",
-        showCurrentRoom: false,
-        showShare: false,
-        actionNote: ""
-      };
-    }
-
-    if (app.opponentMode === "com") {
-      return {
-        label: app.hostTransferred ? "引継ぎ中" : "ひとりで",
-        title: isPlaying && !app.game.winner ? "COM と対局中です。" : "COM と練習します。",
-        hint: app.hostTransferred && (app.matchConfigured || app.game.lastMove) && !app.game.winner ?
-          "このルームを引き継ぎました。相手が戻ると、今の盤面から再開するか選べます。" :
-          (isPlaying && !app.game.winner ?
-            "このまま続けられます。別の対局に移るときだけ「別のルームに参加 / 新しい対局」を使います。" :
-            app.game.winner ?
-              (app.resultOverlayDismissed ? "下の「対局の準備」でルールを押すと、次の準備に移ります。" : "盤面の「もう一戦する」で続けられます。") :
-              "下の「対局の準備」で盤面とルールを選んで START を押します。"),
-        toolsSummary: "別のルームに参加 / 新しい対局",
-        joinLabel: "別のルームに参加",
-        newRoomLabel: "別の対局を作る",
-        // ひとりで遊ぶときはルームID・招待の欄を出さず、盤面の START を主役にする
-        showCurrentRoom: false,
-        showShare: false,
-        actionNote: ""
-      };
-    }
-
-    if (app.role === "host" && !joinedOpponent && !isPlaying && !app.game.winner) {
-      return {
-        label: app.hostTransferred ? "引継ぎ済み" : "招待中",
-        title: app.hostTransferred ? "このルームを引き継ぎました。" : "友だちの参加を待っています。",
-        hint: app.hostTransferred ?
-          "友だちの参加を待つか、COM に切り替えて続けられます。" :
-          "招待を送ると、このルームに参加できます。",
-        toolsSummary: "別のルームに参加 / 新しい対局",
-        joinLabel: "別のルームに参加",
-        newRoomLabel: "別の対局を作る",
-        showCurrentRoom: true,
-        showShare: true,
-        actionNote: ""
-      };
-    }
-
-    if (app.role === "guest" && !isPlaying && !app.game.winner) {
-      return {
-        label: "参加中",
-        title: AppPeer.isConnected() ? "2人そろいました。" : "相手の接続を待っています。",
-        hint: AppPeer.isConnected() ?
-          "色を確認して、2人とも START を押します。" :
-          "つながると、色を確認して2人とも START を押します。",
-        toolsSummary: "別のルームに参加 / 新しい対局",
-        joinLabel: "別のルームに参加",
-        newRoomLabel: "別の対局を作る",
-        showCurrentRoom: true,
-        showShare: false,
-        actionNote: ""
-      };
-    }
-
-    if (app.role === "host" && joinedOpponent && !isPlaying && !app.game.winner) {
-      return {
-        label: "START前",
-        title: AppPeer.isConnected() ? "2人そろいました。" : "相手の接続を待っています。",
-        hint: AppPeer.isConnected() ?
-          "色を確認して、2人とも START を押します。" :
-          "つながると、色を確認して2人とも START を押します。",
-        toolsSummary: "別のルームに参加 / 新しい対局",
-        joinLabel: "別のルームに参加",
-        newRoomLabel: "別の対局を作る",
-        showCurrentRoom: true,
-        showShare: false,
-        actionNote: ""
-      };
-    }
-
-    return {
-      label: app.game.winner ? "対局終了" : "対局中",
-      title: app.game.winner ?
-        "対局が終わりました。" :
-        "いま対局中です。",
-      hint: app.game.winner ?
-        (!app.resultOverlayDismissed ? "盤面の「もう一戦する」で続けられます。" :
-          app.role === "host" ? "下の「対局の準備」でルールを押すと、次の準備に移ります。" :
-          "ホストが次の対局を準備すると、ここで続けられます。") :
-        "手番と置ける場所は盤面に表示しています。",
-      toolsSummary: "別のルームに参加 / 新しい対局",
-      joinLabel: "別のルームに参加",
-      newRoomLabel: "別の対局を作る",
-      showCurrentRoom: true,
-      showShare: false,
-      actionNote: ""
-    };
-  }
-
-  // 結果の下のひとこと（再戦のお願い・返事待ち・もう一戦しますか）
-  function getResultCaption(app) {
-    if (app.rematch.incoming) {
-      return "相手がもう一戦したいそうです。";
-    }
-    if (app.rematch.outgoing) {
-      return "再戦をお願いしました。返事を待っています。";
-    }
-    if (app.localTwoPlayer) {
-      return "1台でもう一戦しますか？";
-    }
-    if (app.opponentMode === "com") {
-      return "COM と続けてもう一戦しますか？";
-    }
-    return "このルームで続けてもう一戦しますか？";
-  }
-
-  // ホストが友だちの参加を待っている（まだつながっていない）開始前
-  function isHostWaiting(app) {
-    return app.role === "host" && app.opponentMode === "human" && app.transportMode === "matchmaking" &&
-      !AppPeer.isConnected() && !app.matchConfigured && !app.game.lastMove && !app.game.winner && !app.reconnecting;
-  }
-
-  // 盤の上に START を出すか
-  function shouldShowStartOverlay(app) {
-    if (app.game.winner || app.matchConfigured || app.reconnecting || app.resumePending || app.spectatorMode) {
-      return false;
-    }
-    if (isHostWaiting(app)) {
-      return true;
-    }
-    if (app.opponentMode === "com") {
-      return app.role === "host";
-    }
-    return app.transportMode === "p2p" && (app.role === "host" || app.role === "guest");
-  }
-
-  // START の下の案内
-  function getStartCaption(app) {
-    if (isHostWaiting(app)) {
-      return "友だちが参加したらお知らせします。待つ間は COM と練習できます（練習はあとで友だちとの対戦に切り替えられます）。";
-    }
-    if (app.localTwoPlayer) {
-      return "黒の人から交代で打ちます。STARTで始めます。";
-    }
-    if (app.opponentMode === "com") {
-      return app.desiredHostColor === Game.BLACK ?
-        "あなたが黒で始めます。STARTで練習を始めます。" :
-        "COMが黒で始めます。STARTで練習を始めます。";
-    }
-    return app.desiredHostColor === Game.BLACK ?
-      "あなたが黒です。2人とも START を押すと対局が始まります。" :
-      "相手が黒です。2人とも START を押すと対局が始まります。";
   }
 
   // 画面の部品を集めて、描く関数（render）とつなぐ関数（bind）を返す
@@ -554,7 +118,6 @@
       roomCurrentId: documentRef.getElementById("roomCurrentId"),
       quickReconnectButton: documentRef.getElementById("quickReconnectButton"),
       roomActionRow: documentRef.getElementById("roomActionRow"),
-      roomActionNote: documentRef.getElementById("roomActionNote"),
       roomToolsSummary: documentRef.getElementById("roomToolsSummary"),
       copyRoomIdButton: documentRef.getElementById("copyRoomIdButton"),
       joinRoomButton: documentRef.getElementById("joinRoomButton"),
@@ -743,7 +306,7 @@
         !app.matchConfigured &&
         !app.game.lastMove &&
         !app.game.winner &&
-        ((app.role === "host") || isHumanP2PSetup(app))
+        ((app.role === "host") || RoomText.isHumanP2PSetup(app))
       ) && !(app.role === "host" && !!app.game.winner));
       setHidden(elements.hostSetupOpponentSlot, app.role !== "host" ||
         (app.opponentMode === "human" &&
@@ -765,7 +328,7 @@
       setText(elements.controlHint, app.localTwoPlayer ?
         "黒が先手です。1台を交代で使います。" : app.opponentMode === "com" ?
         "黒が先手です。COM はこの端末だけで動きます。" :
-        (isHumanP2PSetup(app) ?
+        (RoomText.isHumanP2PSetup(app) ?
           "黒が先手です。色を変えると START 準備は解除されます。" :
           "黒が先手です。友だちを待つ間は「▶ 待つ間 COM と練習する」で練習できます。"));
 
@@ -892,7 +455,7 @@
 
     // START（盤面の上と、準備の欄の一番下）
     function renderStart(app) {
-      var showStart = shouldShowStartOverlay(app);
+      var showStart = RoomText.shouldShowStartOverlay(app);
       // 準備の欄が出ているときは、その一番下にも START を出す（盤面までスクロールしなくてよい）。
       // 盤面の上の START も同じように押せる（どちらも同じ表示・同じ動き）
       var startInSetup = showStart && !elements.hostSetupPanel.classList.contains("hidden");
@@ -904,7 +467,7 @@
         var startLabel = !rulesReady ? (app.role === "host" ? "問題を選ぶと START できます" : "ホストが問題を選んでいます") :
           (app.opponentMode === "human" && app.localStartReady ? "準備OK・相手を待っています" : "▶ START");
         var startDisabled = !rulesReady || (app.opponentMode === "com" ? app.role !== "host" : !!app.localStartReady);
-        var waiting = isHostWaiting(app);
+        var waiting = RoomText.isHostWaiting(app);
         // 友だち待ちのあいだは「待っています」と点のアニメーションを出す
         if (waiting) {
           // 毎回書き直すとアニメーションが最初に戻るので、まだ出していないときだけ入れる
@@ -917,7 +480,7 @@
           startLabel = !rulesReady ? startLabel : "▶ 待つ間 COM と練習する";
           startDisabled = !rulesReady;
         }
-        setText(elements.startCaption, getStartCaption(app));
+        setText(elements.startCaption, RoomText.getStartCaption(app));
         setText(elements.startButton, startLabel);
         setText(elements.setupStartButton, startLabel);
         elements.startButton.disabled = startDisabled;
@@ -941,7 +504,7 @@
       setText(elements.resultWord, app.localTwoPlayer && app.game.winner && outcome !== "draw" ?
         app.game.winner + "の勝ち" :
         (outcome === "draw" ? "DRAW" : (outcome === "win" ? "WIN" : "LOSE")));
-      setText(elements.resultCaption, getResultCaption(app));
+      setText(elements.resultCaption, RoomText.getResultCaption(app));
       var resultLives = app.rules.mode === "quiz" && app.rules.lives && counts.black === counts.white ?
         "（ライフ " + ((app.quizLives || {})[app.myColor === Game.WHITE ? Game.WHITE : Game.BLACK] || 0) + " - " +
         ((app.quizLives || {})[app.myColor === Game.WHITE ? Game.BLACK : Game.WHITE] || 0) + "）" : "";
@@ -1131,14 +694,14 @@
           createBoardElements(elements.board, boardClickHandler, boardSize);
         }
         elements.board.classList.toggle("is-quiz", app.rules.mode === "quiz" && app.matchConfigured);
-        elements.board.classList.toggle("is-waiting", isHostWaiting(app));
+        elements.board.classList.toggle("is-waiting", RoomText.isHostWaiting(app));
         var counts = Game.countDiscs(app.game.board);
         var myCardColor = "";
         var opponentCardColor = "";
         var currentTurn = app.game.currentTurn;
         var outcome = Game.outcomeForColor(app.game.winner, app.myColor || Game.BLACK);
-        var roomFlow = getRoomFlow(app);
-        var showMessage = shouldShowMessageBox(app);
+        var roomFlow = RoomText.getRoomFlow(app);
+        var showMessage = RoomText.shouldShowMessageBox(app);
         var isOpponentTurn = !!app.myColor && !!currentTurn && currentTurn === Game.getOpponent(app.myColor);
         // 1台で2人のときは、どちらの手番でもこの端末で打てる
         var isMyTurn = !!app.myColor && !!currentTurn && (app.localTwoPlayer || currentTurn === app.myColor);
@@ -1162,15 +725,15 @@
         setText(elements.joinRoomButton, roomFlow.joinLabel);
         setLabel(elements.newRoomButton, "add", roomFlow.newRoomLabel);
         setText(elements.roomCurrentId, app.roomId ? ("ルームID: " + app.roomId) : "ルーム未作成");
-        setLabelWithLives(elements.myLabel, getMyLabel(app), livesText(app, app.myColor || (app.localTwoPlayer ? Game.BLACK : "")));
-        setLabelWithLives(elements.opponentLabel, getOpponentLabel(app),
+        setLabelWithLives(elements.myLabel, RoomText.getMyLabel(app), livesText(app, app.myColor || (app.localTwoPlayer ? Game.BLACK : "")));
+        setLabelWithLives(elements.opponentLabel, RoomText.getOpponentLabel(app),
           livesText(app, app.myColor ? Game.getOpponent(app.myColor) : (app.localTwoPlayer ? Game.WHITE : "")));
-        setText(elements.myName, app.localTwoPlayer ? localName(Game.BLACK) : (app.displayName || "あなた"));
-        setText(elements.opponentName, getOpponentName(app));
-        setText(elements.myPresence, getMyPresenceText(app));
-        setText(elements.opponentPresence, getOpponentPresenceText(app));
-        setText(elements.myStatus, getMyStatusText(app));
-        setText(elements.opponentStatus, getOpponentStatusText(app));
+        setText(elements.myName, app.localTwoPlayer ? RoomText.localName(Game.BLACK) : (app.displayName || "あなた"));
+        setText(elements.opponentName, RoomText.getOpponentName(app));
+        setText(elements.myPresence, RoomText.getMyPresenceText(app));
+        setText(elements.opponentPresence, RoomText.getOpponentPresenceText(app));
+        setText(elements.myStatus, RoomText.getMyStatusText(app));
+        setText(elements.opponentStatus, RoomText.getOpponentStatusText(app));
         setText(elements.myScore, String(app.myColor ? (app.myColor === Game.BLACK ? counts.black : counts.white) : "-"));
         setText(elements.opponentScore, String(app.myColor ? (app.myColor === Game.BLACK ? counts.white : counts.black) : "-"));
         setHidden(elements.messageBox, !showMessage);
@@ -1200,10 +763,6 @@
         setHidden(elements.copyRoomIdButton, !app.roomId);
         setHidden(elements.roomActionRow, !app.roomId || isSolo);
         setHidden(elements.shareButton, !roomFlow.showShare);
-        setHidden(elements.roomActionNote, roomFlow.showShare || !roomFlow.actionNote);
-        if (!roomFlow.showShare && roomFlow.actionNote) {
-          setText(elements.roomActionNote, roomFlow.actionNote);
-        }
         // ルームがないときは「友だちと対戦／COMと練習」を主役にし、折りたたみの「別の対局を作る」は出さない
         setHidden(elements.startChoices, !!app.roomId);
         setHidden(elements.newRoomButton, !app.roomId);
@@ -1214,7 +773,7 @@
 
         setHidden(elements.reconnectNotice, !app.reconnecting);
         if (app.reconnecting) {
-          setText(elements.reconnectText, getReconnectText(app));
+          setText(elements.reconnectText, RoomText.getReconnectText(app));
         }
 
         setHidden(elements.resumeNotice, !(app.resumePending || app.spectatorMode));
