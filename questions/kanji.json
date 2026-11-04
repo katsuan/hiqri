@@ -3,6 +3,7 @@
   "label": "漢字",
   "order": 10,
   "icon": "🈷️",
+  "iconName": "edit",
   "levels": [
     {
       "id": "e",

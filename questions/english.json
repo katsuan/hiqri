@@ -3,6 +3,7 @@
   "label": "英単語",
   "order": 20,
   "icon": "🔤",
+  "iconName": "languages",
   "levels": [
     {
       "id": "j",

@@ -4,7 +4,7 @@
 (function (window) {
   // ジャンルとレベル。数学はその場で計算して作るので組み込み、それ以外は questions/*.json から読み込む（load）
   //   level.type: "pairs"（[問い, 答え] の組）/ "choices"（{ q, a, w: [まちがい3つ], m }）/ "math"
-  var MATH_GENRE = { id: "math", label: "数学", icon: "🧮", order: 90, levels: [
+  var MATH_GENRE = { id: "math", label: "数学", icon: "🧮", iconName: "calculator", order: 90, levels: [
     { id: "e", label: "小学", type: "math" }, { id: "j", label: "中学", type: "math" },
     { id: "h", label: "高校", type: "math" }, { id: "u", label: "大学（微積）", type: "math" }
   ] };
@@ -89,6 +89,8 @@
       id: raw.id,
       label: raw.label,
       icon: isText(raw.icon) ? raw.icon : "📘",
+      // 画面に出す線アイコンの名前（Q キットの ls-icon。Q キットにない形は assets/icons/ と css/board.css）
+      iconName: isText(raw.iconName) ? raw.iconName : "book-open",
       order: Number(raw.order) || 50,
       levels: levels
     };
@@ -257,13 +259,13 @@
     return label;
   }
 
-  // 選んだ問題の名前（「📝 漢字（中学）」など）
+  // 選んだ問題の名前（「漢字（中学）」など。文字だけなので絵文字は付けない。印は画面が線アイコンで出す）
   function describePick(pick) {
     var genre = findGenre(pick.genre);
-    return genre.icon + " " + genre.label + "（" + levelLabelOf(pick) + "）";
+    return genre.label + "（" + levelLabelOf(pick) + "）";
   }
 
-  // 1つなら「🈷️ 漢字（中学）」、複数なら「🈷️🔤 ミックス（3種類）」
+  // 1つなら「漢字（中学）」、複数なら「ミックス（3種類）」
   function describe(rules) {
     var picks = normalizeRules(rules).picks;
     if (!picks.length) {
@@ -272,14 +274,7 @@
     if (picks.length === 1) {
       return describePick(picks[0]);
     }
-    var icons = [];
-    picks.forEach(function (pick) {
-      var icon = findGenre(pick.genre).icon;
-      if (icons.indexOf(icon) === -1) {
-        icons.push(icon);
-      }
-    });
-    return icons.join("") + " ミックス（" + picks.length + "種類）";
+    return "ミックス（" + picks.length + "種類）";
   }
 
   // ---- 乱数（種から毎回同じ並びを出す） ----

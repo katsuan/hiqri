@@ -3,6 +3,7 @@
   "label": "ことわざ・四字熟語",
   "order": 30,
   "icon": "📜",
+  "iconName": "scroll",
   "levels": [
     {
       "id": "kotowaza",

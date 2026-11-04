@@ -828,7 +828,7 @@
       setText(elements.quizWatchPillText, app.opponentQuiz && app.opponentQuiz.byCom ? "COM が回答中…" : "相手が回答中…");
       if (prompt && prompt !== renderedQuizPrompt) {
         renderedQuizPrompt = prompt;
-        setText(elements.quizGenre, (app.localTwoPlayer && prompt.color ? (prompt.color === Game.BLACK ? "⚫ 黒の人・" : "⚪ 白の人・") : "") +
+        setLabel(elements.quizGenre, (window.OthelloQuiz.findGenre(prompt.question.genre) || {}).iconName || "", (app.localTwoPlayer && prompt.color ? (prompt.color === Game.BLACK ? "⚫ 黒の人・" : "⚪ 白の人・") : "") +
           prompt.question.pickLabel + (prompt.attempt ? "・このマス" + (prompt.attempt + 1) + "問目" : ""));
         window.OthelloTex.setText(elements.quizText, prompt.question.text, prompt.question.tex, rerenderQuiz);
         elements.quizChoices.innerHTML = prompt.question.choices.map(function (choice, index) {
@@ -1018,7 +1018,8 @@
           return chip(size + "×" + size, size, "data-size");
         }).join("");
         elements.pickRows.innerHTML = window.OthelloQuiz.GENRES.map(function (genre) {
-          return '<div class="pick-row"><span class="pick-genre">' + esc(genre.icon + " " + genre.label) + "</span>" +
+          return '<div class="pick-row"><span class="pick-genre"><span class="ls-icon" data-icon="' + esc(genre.iconName) +
+            '" aria-hidden="true"></span>' + esc(genre.label) + "</span>" +
             '<div class="ls-chips">' +
             genre.levels.map(function (level) { return chip(level.label, genre.id + ":" + level.id, "data-pick"); }).join("") +
             "</div></div>";

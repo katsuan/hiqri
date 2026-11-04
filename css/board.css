@@ -657,11 +657,18 @@
   font-size: 0.82rem;
 }
 
+/* 名前は、ボタンの1行目にそろえる（ボタンが2行になっても、名前は上の行の横） */
 .rule-row {
   display: grid;
   grid-template-columns: 64px minmax(0, 1fr);
-  align-items: center;
+  align-items: start;
   gap: 8px;
+}
+
+.rule-row > .host-setup-label {
+  display: flex;
+  align-items: center;
+  min-height: 40px; /* チップ（ls-chip）の高さと同じ */
 }
 
 #quizRuleRows {
@@ -877,17 +884,41 @@
   gap: 8px;
 }
 
+/* ジャンル名は、レベルのボタンの1行目にそろえる（ボタンが2行になっても、名前は上の行の横） */
 .pick-row {
   display: grid;
   grid-template-columns: 9.5em minmax(0, 1fr);
-  align-items: center;
+  align-items: start;
   gap: 8px;
 }
 
 .pick-genre {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* 線アイコンと字の間 */
+  min-height: 40px; /* チップ（ls-chip）の高さと同じ */
   font-size: 0.85rem;
   font-weight: 700;
 }
+
+.pick-genre .ls-icon {
+  color: var(--ls-subtext);
+}
+
+/* 問題のシートの頭（ジャンル）も線アイコン＋名前 */
+.quiz-genre {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ジャンルの線アイコン：Q キットにまだない形（Lucide。assets/icons/LICENSE）。Q キットに入ったら消す。
+   変数（--ls-i）に入れると Q キットの ui.css の場所から読まれるので、絵はここで直接 mask-image に */
+.ls-icon[data-icon="languages"] { -webkit-mask-image: url("../assets/icons/languages.svg"); mask-image: url("../assets/icons/languages.svg"); }
+.ls-icon[data-icon="globe"] { -webkit-mask-image: url("../assets/icons/globe.svg"); mask-image: url("../assets/icons/globe.svg"); }
+.ls-icon[data-icon="calculator"] { -webkit-mask-image: url("../assets/icons/calculator.svg"); mask-image: url("../assets/icons/calculator.svg"); }
+.ls-icon[data-icon="scroll"] { -webkit-mask-image: url("../assets/icons/scroll.svg"); mask-image: url("../assets/icons/scroll.svg"); }
+.ls-icon[data-icon="book-open"] { -webkit-mask-image: url("../assets/icons/book-open.svg"); mask-image: url("../assets/icons/book-open.svg"); }
 
 /* スマホでもジャンル名とレベルを1行に並べ、縦に長くならないようにする */
 @media (max-width: 420px) {
@@ -897,6 +928,8 @@
   }
 
   .pick-genre {
+    gap: 4px;
+    min-height: 34px; /* せまい画面のチップの高さと同じ */
     font-size: 0.76rem;
     line-height: 1.3;
   }
