@@ -86,3 +86,15 @@ test("盤は文字の並びにして送り、同じ盤に戻せる。変な文�
   assert.equal(Game.deserializeBoard(["B"]).length, 8);
   assert.deepEqual(Game.countDiscs(b), { black: 4, white: 1 });
 });
+
+test("COM の手：すみ > へり > ひっくり返る数。置けなければ null", () => {
+  // へり (0,1) だけに置ける形
+  const edge = board(["..WB....", ".W......", "B.......", "........", "........", "........", "........", "........"]);
+  assert.deepEqual(JSON.parse(JSON.stringify(Game.pickComMove(edge, B))), { row: 0, col: 1, score: 11 });
+  // すみ (0,0) にも置ける形
+  const corner = board([".WB.....", "W.......", "B.......", "........", "........", "........", "........", "........"]);
+  assert.deepEqual(JSON.parse(JSON.stringify(Game.pickComMove(corner, B))), { row: 0, col: 0, score: 102 });
+  // はじめの盤：どれも1つ返る。同じなら先に見つけたマス
+  assert.deepEqual(JSON.parse(JSON.stringify(Game.pickComMove(Game.createInitialBoard(8), B))), { row: 2, col: 3, score: 1 });
+  assert.equal(Game.pickComMove(board(["B......."]), W), null);
+});

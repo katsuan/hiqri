@@ -192,10 +192,7 @@
 
     // COM の番なら、少し待って COM が打つ（教養モードでは問題に答える様子も見せる）
     function maybeScheduleComTurn() {
-      var moves;
       var bestMove;
-      var index;
-      var score;
 
       deps.stopTimer("comTimer");
       if (app.opponentMode !== "com" || app.transportMode !== "com" || app.localTwoPlayer ||
@@ -206,20 +203,7 @@
         return;
       }
 
-      moves = Game.getValidMoves(app.game.board, app.game.currentTurn);
-      var last = Game.sizeOf(app.game.board) - 1;
-      for (index = 0; index < moves.length; index += 1) {
-        score = moves[index].flips.length;
-        if ((moves[index].row === 0 || moves[index].row === last) && (moves[index].col === 0 || moves[index].col === last)) {
-          score += 100;
-        } else if (moves[index].row === 0 || moves[index].row === last || moves[index].col === 0 || moves[index].col === last) {
-          score += 10;
-        }
-        if (!bestMove || score > bestMove.score) {
-          bestMove = { row: moves[index].row, col: moves[index].col, score: score };
-        }
-      }
-
+      bestMove = Game.pickComMove(app.game.board, app.game.currentTurn);
       if (!bestMove) {
         return;
       }

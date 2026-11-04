@@ -270,6 +270,29 @@
     return "不正解でした。" + colorName(nextColor) + "は置ける場所がないので、もう一度" + colorName(color) + "の手番です。";
   }
 
+  // COM の手：ひっくり返る数が多いほど・すみ（+100）・へり（+10）ほどよい。同じなら先に見つけたマス。置けなければ null
+  function pickComMove(board, color) {
+    var moves = getValidMoves(board, color);
+    var last = sizeOf(board) - 1;
+    var best = null;
+    var index;
+    var move;
+    var score;
+    var edgeRow;
+    var edgeCol;
+
+    for (index = 0; index < moves.length; index += 1) {
+      move = moves[index];
+      edgeRow = move.row === 0 || move.row === last;
+      edgeCol = move.col === 0 || move.col === last;
+      score = move.flips.length + (edgeRow && edgeCol ? 100 : (edgeRow || edgeCol ? 10 : 0));
+      if (!best || score > best.score) {
+        best = { row: move.row, col: move.col, score: score };
+      }
+    }
+    return best;
+  }
+
   window.OthelloGame = {
     BOARD_SIZE: BOARD_SIZE,
     BOARD_SIZES: BOARD_SIZES,
@@ -289,6 +312,7 @@
     countDiscs: countDiscs,
     applyMove: applyMove,
     resolveTurnAfterMove: resolveTurnAfterMove,
-    outcomeForColor: outcomeForColor
+    outcomeForColor: outcomeForColor,
+    pickComMove: pickComMove
   };
 }(window));
