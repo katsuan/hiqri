@@ -14,10 +14,7 @@
 body {
   min-height: 100vh;
   padding: 24px 16px 48px;
-  background:
-    radial-gradient(circle at top left, rgba(31, 122, 69, 0.16), transparent 28%),
-    radial-gradient(circle at bottom right, rgba(18, 107, 58, 0.16), transparent 24%),
-    linear-gradient(180deg, #fbf7ef 0%, var(--ls-bg) 100%);
+  background: var(--ls-bg); /* 平らな色（グラデーションにしない） */
 }
 
 .hidden {
@@ -29,7 +26,7 @@ body {
   box-shadow: 0 0 0 3px rgba(31, 122, 69, 0.2);
 }
 
-/* 起動中（LINE ログイン・ルーム確認）は、始め方の欄と同じ大きさの読みこみ中の箱（Q キットの ls-skeleton と同じ見た目）。
+/* 起動中（LINE ログイン・ルーム確認）は、始め方の欄と同じ大きさの読みこみ中の箱（平らな色。ゆっくり濃淡が動く）。
    中身は見えないだけで場所をとっているので、読みこみが終わっても位置がずれない */
 .boot-note {
   position: absolute;
@@ -49,9 +46,13 @@ body.boot-loading .top-actions {
   position: relative;
   pointer-events: none;
   border-radius: var(--ls-radius-md);
-  background: linear-gradient(90deg, var(--ls-surface-sub) 25%, var(--ls-surface) 50%, var(--ls-surface-sub) 75%);
-  background-size: 200% 100%;
-  animation: ls-skeleton 1.2s linear infinite;
+  background: var(--ls-surface-sub);
+  animation: boot-pulse 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes boot-pulse {
+  from { opacity: 1; }
+  to { opacity: 0.6; }
 }
 
 body.boot-loading .top-actions > * {
@@ -91,9 +92,9 @@ body.is-lobby .board-shell {
 
 .topbar {
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: 18px;
+  gap: 16px;
   align-items: center;
-  padding: 22px 24px;
+  padding: 24px;
 }
 
 /* 見出しの行：名前（左）、ロゴと版（右） */
@@ -105,13 +106,11 @@ body.is-lobby .board-shell {
   margin-top: 4px;
 }
 
+/* 版は札にせず、うすい小さな字だけ */
 .version-badge {
   display: inline-flex;
   align-items: center;
-  padding: 5px 10px;
-  border-radius: 999px;
-  background: rgba(29, 42, 34, 0.06);
-  color: rgba(29, 42, 34, 0.46);
+  color: var(--ls-faint);
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -140,7 +139,7 @@ body.is-lobby .board-shell {
 .top-actions {
   display: grid;
   grid-template-columns: minmax(0, 1fr); /* 長いルームIDでも横にはみ出さない（320px） */
-  gap: 12px;
+  gap: 16px;
   min-width: 260px;
   min-height: 212px;
 }
@@ -152,7 +151,7 @@ body.is-lobby .board-shell {
   min-width: 0;
 }
 
-/* 状態（はじめる / 招待中 / ひとりで …）は小さなラベルにして、見出しと同じ行に置く */
+/* 状態（はじめる / 招待中 / ひとりで …）は札にせず、うすい小さな字で見出しと同じ行に置く */
 .room-state-head {
   display: flex;
   align-items: center;
@@ -161,12 +160,9 @@ body.is-lobby .board-shell {
 }
 
 .room-state-label {
-  padding: 3px 9px;
-  border-radius: 999px;
-  background: rgba(29, 42, 34, 0.07);
   color: var(--ls-subtext);
   font-size: 0.72rem;
-  font-weight: 800;
+  font-weight: 700;
   white-space: nowrap;
 }
 
@@ -217,7 +213,7 @@ body.is-lobby .board-shell {
   display: inline-flex;
   align-items: center;
   min-height: 42px;
-  padding: 0 14px;
+  padding: 0 16px;
   border-radius: 999px;
   background: rgba(29, 42, 34, 0.06);
   font-weight: 700;
@@ -245,30 +241,40 @@ body.is-lobby .board-shell {
 }
 
 .room-tools-body {
-  gap: 10px;
+  gap: 8px;
 }
 
 /* ルームがないときの始め方。いちばん使う「友だちと対戦」を上に大きく、COM・1台で2人を下に並べる */
 .start-choices {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-  margin-top: 12px;
+  gap: 8px;
+  margin-top: 8px;
 }
 
 .start-choices .start-choice:first-child {
   grid-column: 1 / -1;
 }
 
+/* 名前と説明は左にそろえる */
 .start-choice {
   display: grid;
   gap: 4px;
-  justify-items: center;
+  justify-content: stretch;
+  justify-items: start;
+  align-content: center;
   min-height: 84px;
-  padding: 12px 8px;
-  border-radius: 18px;
-  text-align: center;
+  padding: 16px;
+  border-radius: 16px;
+  text-align: left;
   white-space: normal;
+}
+
+/* せまい画面（320px など）では、名前が2行に折れないよう左右を詰める */
+@media (max-width: 360px) {
+  .start-choice {
+    padding: 16px 8px;
+  }
 }
 
 .start-choice-title {
@@ -279,7 +285,7 @@ body.is-lobby .board-shell {
 .start-choice-sub {
   font-size: 0.78rem;
   font-weight: 600;
-  opacity: 0.85;
+  opacity: 0.8;
 }
 
 /* ブラウザ版で開いたときの、ログインするか LINE 版で開くかを選ぶ画面（js/platform.js の showOutsideChoice） */
@@ -289,14 +295,13 @@ body.is-lobby .board-shell {
 }
 
 .outside-choice-card {
-  justify-items: center;
-  gap: 10px;
+  justify-items: start;
+  gap: 8px;
   width: min(100%, 360px);
-  text-align: center;
 }
 
 .outside-choice-text {
-  margin-bottom: 6px;
+  margin-bottom: 8px;
   font-size: 14px;
 }
 
@@ -315,7 +320,7 @@ body.is-lobby .board-shell {
 
 @media (max-width: 640px) {
   body {
-    padding: 16px 10px 28px;
+    padding: 16px 8px 32px;
   }
 
   .top-actions {
@@ -326,8 +331,8 @@ body.is-lobby .board-shell {
 
   /* スマホではヘッダーを詰め、盤面までの距離を短くする */
   .topbar {
-    gap: 10px;
-    padding: 14px 16px;
+    gap: 8px;
+    padding: 16px;
   }
 
   .top-actions {
@@ -369,15 +374,7 @@ body.is-lobby .board-shell {
  * 盤・石・白番の札（白い石の色）は明るいまま。
  */
 @media (prefers-color-scheme: dark) {
-  :root[data-ls-dark="auto"] body {
-    background:
-      radial-gradient(circle at top left, rgba(31, 122, 69, 0.22), transparent 28%),
-      radial-gradient(circle at bottom right, rgba(18, 107, 58, 0.18), transparent 24%),
-      var(--ls-bg);
-  }
-
   :root[data-ls-dark="auto"] .version-badge {
-    background: rgba(255, 255, 255, 0.08);
     color: rgba(255, 255, 255, 0.5);
   }
 

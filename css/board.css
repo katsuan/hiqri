@@ -7,21 +7,21 @@
 .board-layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 280px;
-  gap: 18px;
+  gap: 16px;
   align-items: start;
-  margin-top: 18px;
+  margin-top: 16px;
 }
 
 .board-shell,
 .sidebar {
-  gap: 14px;
-  padding: 18px;
+  gap: 16px;
+  padding: 16px;
 }
 
 .board-head {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+  gap: 8px;
 }
 
 /* 先手（黒）を左、後手（白）を右に並べる。色が決まる前は「あなた」が左 */
@@ -35,14 +35,14 @@
 
 .host-setup-panel {
   display: grid;
-  gap: 10px;
-  padding: 8px 2px 2px;
+  gap: 8px;
+  padding-top: 8px;
 }
 
 .host-setup-grid {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
-  gap: 14px 18px;
+  gap: 16px;
   align-items: end;
 }
 
@@ -55,10 +55,6 @@
 
 #hostSetupOpponentSlot {
   justify-self: start;
-}
-
-#hostSetupOpponentSlot .ls-chips {
-  justify-content: flex-end;
 }
 
 .host-setup-label {
@@ -76,8 +72,8 @@
 .swap-color-button {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 14px;
+  gap: 8px;
+  padding: 8px 16px;
   border: 0;
   border-radius: 999px;
   cursor: pointer;
@@ -91,7 +87,7 @@
 .swap-color-button::after {
   content: "";
   position: absolute;
-  inset: -5px 0;
+  inset: -8px 0;
 }
 
 .swap-disc {
@@ -130,8 +126,8 @@
 
 .status-banner {
   display: grid;
-  gap: 10px;
-  padding: 12px 14px;
+  gap: 8px;
+  padding: 16px;
   border-radius: 16px;
   background: rgba(31, 122, 69, 0.12);
   border: 1px solid rgba(31, 122, 69, 0.28);
@@ -150,7 +146,7 @@
   inset: 0;
   display: grid;
   place-items: center;
-  padding: 20px;
+  padding: 16px;
 }
 
 .start-overlay {
@@ -162,7 +158,7 @@
   width: min(100%, 400px);
   display: grid;
   gap: 16px;
-  padding: 24px 22px;
+  padding: 24px;
   border-radius: 24px;
   background: rgba(255, 250, 240, 0.96);
   text-align: center;
@@ -273,11 +269,11 @@
 .player-card {
   display: grid;
   grid-template-columns: 54px minmax(0, 1fr);
-  gap: 12px;
+  gap: 16px;
   align-items: center;
   overflow: hidden;
   min-height: 112px;
-  padding: 14px;
+  padding: 16px;
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.74);
   border: 3px solid transparent;
@@ -296,12 +292,13 @@
   box-shadow: 0 12px 24px rgba(31, 122, 69, 0.22);
 }
 
+/* 札は平らな色（黒番は黒い石・白番は白い石の色）。手番は緑のふちで */
 .player-card.color-white.active-turn {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(244, 239, 228, 0.98) 100%);
+  background: #fdfbf6;
 }
 
 .player-card.color-black {
-  background: linear-gradient(180deg, rgba(42, 48, 45, 0.94) 0%, rgba(24, 28, 26, 0.92) 100%);
+  background: #222826;
   color: #f6f3ea;
 }
 
@@ -321,7 +318,7 @@
 }
 
 .player-card.color-white {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(244, 239, 228, 0.96) 100%);
+  background: #f8f5ee;
   border-color: rgba(32, 48, 36, 0.12);
 }
 
@@ -353,7 +350,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
+  gap: 8px;
   min-width: 0;
   min-height: 28px;
 }
@@ -420,14 +417,14 @@
   border-radius: 16px;
   border: 1px solid rgba(29, 42, 34, 0.08);
   min-height: 74px;
-  padding: 14px;
+  padding: 16px;
   background: #fff;
   line-height: 1.55;
 }
 
 /* 遊び方・接続情報（Q キットの開閉 ls-fold の中身） */
 .debug-grid {
-  gap: 10px;
+  gap: 8px;
 }
 
 .info-grid,
@@ -438,14 +435,14 @@
 .debug-item,
 .info-pill {
   min-width: 0;
-  padding: 10px 12px;
+  padding: 8px 16px;
   border-radius: 12px;
   background: var(--ls-surface-sub);
 }
 
 .debug-item {
   display: grid;
-  gap: 3px;
+  gap: 4px;
 }
 
 .info-pill {
@@ -574,7 +571,7 @@
 @media (max-width: 640px) {
   .board-shell,
   .sidebar {
-    padding: 14px;
+    padding: 16px;
   }
 
   .board-head {
@@ -582,18 +579,18 @@
   }
 
   .host-setup-grid {
-    gap: 10px;
+    gap: 8px;
   }
 
   .host-setup-slot {
-    gap: 6px;
+    gap: 8px;
   }
 
   .player-card {
     grid-template-columns: 40px minmax(0, 1fr);
-    gap: 10px;
+    gap: 8px;
     min-height: 74px;
-    padding: 10px;
+    padding: 8px;
     border-radius: 14px;
   }
 
@@ -631,14 +628,14 @@
   }
 
   .result-card {
-    padding: 20px 16px;
+    padding: 24px 16px;
   }
 }
 
 /* ---- ルール（ふつう / 教養・盤面・ジャンル・レベル） ---- */
 .rule-setup {
   display: grid;
-  gap: 10px;
+  gap: 8px;
 }
 
 .setup-heading {
@@ -669,7 +666,7 @@
 
 #quizRuleRows {
   display: grid;
-  gap: 10px;
+  gap: 8px;
 }
 
 #quizRuleRows.hidden {
@@ -678,15 +675,15 @@
 
 .rule-summary,
 .rule-badge {
-  margin-top: 10px;
+  margin-top: 8px;
   font-weight: 700;
 }
 
+/* 対局中のルールは、盤の上に左そろえで、うすく */
 .rule-badge {
   margin: 0 0 8px;
-  text-align: center;
+  color: var(--ls-subtext);
   font-size: 0.85rem;
-  opacity: 0.85;
 }
 
 /* ---- 教養モードの問題（盤面の上に出す） ---- */
@@ -698,7 +695,7 @@
 }
 
 .quiz-card {
-  gap: 10px;
+  gap: 8px;
   width: min(100%, 460px);
   padding: 16px;
 }
@@ -722,7 +719,7 @@
 
 .quiz-choice {
   min-height: 48px;
-  padding: 10px 12px;
+  padding: 8px 16px;
   border: 1px solid rgba(0, 0, 0, 0.15);
   border-radius: 14px;
   background: #fff;
@@ -752,7 +749,6 @@
 .quiz-result {
   min-height: 1.4em;
   font-weight: 800;
-  text-align: center;
 }
 
 .quiz-result.is-correct {
@@ -764,7 +760,7 @@
 }
 
 .quiz-give-up {
-  justify-self: center;
+  justify-self: start;
   white-space: normal;
   font-size: 0.85rem;
 }
@@ -794,7 +790,7 @@
 }
 
 .quiz-watch-toggle {
-  padding: 2px 10px;
+  padding: 4px 8px;
   border: 1px solid rgba(0, 0, 0, 0.15);
   border-radius: 999px;
   background: transparent;
@@ -812,7 +808,7 @@
   bottom: calc(16px + env(safe-area-inset-bottom, 0px));
   z-index: 40;
   transform: translateX(-50%);
-  padding: 8px 14px;
+  padding: 8px 16px;
   border: 0;
   border-radius: 999px;
   background: rgba(20, 50, 35, 0.85);
@@ -825,7 +821,7 @@
 }
 
 .quiz-watch-pill span + span {
-  margin-left: 6px;
+  margin-left: 8px;
   opacity: 0.8;
 }
 
@@ -889,7 +885,7 @@
 @media (max-width: 420px) {
   .pick-row {
     grid-template-columns: 5.6em minmax(0, 1fr);
-    gap: 6px;
+    gap: 8px;
   }
 
   .pick-genre {
@@ -899,12 +895,12 @@
 
   .pick-row .ls-chip {
     min-height: 34px;
-    padding: 0 10px;
+    padding: 0 8px;
     font-size: 0.8rem;
   }
 
   .pick-row .ls-chips {
-    gap: 6px;
+    gap: 8px;
   }
 }
 
@@ -945,7 +941,7 @@
 
 .quiz-countdown {
   flex: 0 0 auto;
-  padding: 2px 10px;
+  padding: 4px 8px;
   border-radius: 999px;
   background: rgba(29, 42, 34, 0.08);
   font-size: 0.85rem;
@@ -979,8 +975,8 @@
 
 .waiting-dots {
   display: inline-flex;
-  gap: 5px;
-  margin-left: 6px;
+  gap: 4px;
+  margin-left: 8px;
   vertical-align: middle;
 }
 
@@ -1067,7 +1063,7 @@
 /* 対局の結果をカードで送る（結果の画面のいちばん下） */
 .result-share-button {
   display: flex;
-  margin: 10px auto 0;
+  margin: 8px auto 0;
 }
 
 /* 始める・結果のカードは明るい紙の色のまま。暗い表示でも中の字とボタンは明るいときの色に（薄い字にならないように） */
@@ -1092,7 +1088,7 @@
 
   .result-card {
     gap: 8px;
-    padding: 14px 12px;
+    padding: 16px;
   }
 
   .result-word {
@@ -1104,6 +1100,6 @@
   }
 
   .result-share-button {
-    margin-top: 2px;
+    margin-top: 0;
   }
 }
