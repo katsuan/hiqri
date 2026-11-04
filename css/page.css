@@ -26,16 +26,6 @@ body {
   box-shadow: 0 0 0 3px rgba(31, 122, 69, 0.2);
 }
 
-/* 起動中の「準備しています…」は、画面には出さず読み上げだけ */
-.boot-note {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  white-space: nowrap;
-}
-
 .top-actions,
 .board-layout {
   transition: opacity 160ms ease;
