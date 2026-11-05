@@ -2,11 +2,12 @@
 // session.js から使う。読み書きは firebase.js
 (function (window) {
   // ルームの中身と自分から、入り方を決める（create-host・resume-host・resume-guest・join-guest・full・missing）。
-  // legacyUserId：前の版で作ったルーム（ID をそのまま書いていた）にも戻れるように
+  // legacyUserId：前の版で作ったルーム（ID をそのまま書いていた・端末をまぜない印）にも戻れるように。1つか配列
   function resolveEntry(roomData, userId, joinRequested, legacyUserId) {
     // ルームに書かれた ID が自分か（前の版の ID も見る）
     function isMe(value) {
-      return !!value && (value === userId || (!!legacyUserId && value === legacyUserId));
+      var legacy = Array.isArray(legacyUserId) ? legacyUserId : [legacyUserId];
+      return !!value && (value === userId || legacy.some(function (id) { return !!id && value === id; }));
     }
     if (!roomData) {
       return joinRequested ? "missing" : "create-host";

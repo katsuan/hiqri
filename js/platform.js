@@ -105,6 +105,21 @@
     return "https://liff.line.me/" + window.APP_CONFIG.liffId + "?room=" + encodeURIComponent(roomId);
   }
 
+  // この端末（このブラウザ）の印。同じ人が2台で開いても、ルームの席と通信の ID を分けるため（この端末に残して、毎回同じにする）
+  function getDeviceId() {
+    var storageKey = "hiqri-device-id";
+    try {
+      var existing = window.localStorage.getItem(storageKey) || "";
+      if (!existing) {
+        existing = generateId("d");
+        window.localStorage.setItem(storageKey, existing);
+      }
+      return existing;
+    } catch (error) {
+      return generateId("d");
+    }
+  }
+
   // 手元で試すときの仮の ID（この端末に残して、毎回同じにする）
   function getStableDebugUserId() {
     var storageKey = "liff-p2p-debug-user-id";
@@ -449,6 +464,7 @@
     generateId: generateId,
     sanitizeForPeer: sanitizeForPeer,
     hashUserId: hashUserId,
+    getDeviceId: getDeviceId,
     getAppBaseUrl: getAppBaseUrl,
     getAssetUrl: getAssetUrl,
     buildLiffRoomUrl: buildLiffRoomUrl,

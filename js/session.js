@@ -318,7 +318,7 @@
         saved = null;
       }
 
-      if (!saved || saved.userId !== app.userId || saved.role !== app.role) {
+      if (!saved || !isMyUserId(saved.userId) || saved.role !== app.role) {
         return false;
       }
 
@@ -343,6 +343,11 @@
         app.quizLives = saved.quizLives || freshLives();
       }
       return true;
+    }
+
+    // 自分の印か（前の版の印も見る）
+    function isMyUserId(value) {
+      return !!value && (value === app.userId || (app.legacyUserId || []).indexOf(value) !== -1);
     }
 
     // 相手の通信の ID（ルームに書かれたもの）
@@ -858,6 +863,11 @@
             play.handlePeerUnavailable();
             return;
           }
+          // 同じ通信の ID がもう使われている：このルームを、この端末の別の画面（タブ）で開いている
+          if (error && error.type === "unavailable-id") {
+            setMessage(failed("このルームは、この端末の別の画面（タブ）でも開いています。片方を閉じてから、開きなおしてね。", error));
+            return;
+          }
           setMessage(failed("つなぐ準備がうまくいきませんでした。電波のよいところで、もう一度ためしてね。", error));
         },
         onPeerDisconnected: function () { play.handleLinkLost("通信が切れました。"); }
@@ -1033,9 +1043,17 @@
         Platform.initIdentity().then(function (identity) {
           app.displayName = identity.displayName;
           app.pictureUrl = identity.pictureUrl;
-          // ルームには LINE のユーザー ID そのものではなく、そこから作った別の文字を書く
-          app.legacyUserId = identity.userId;
-          return Platform.hashUserId(identity.userId);
+          // ルームには LINE のユーザー ID そのものではなく、そこから作った別の文字を書く。
+          // 端末の印もまぜて、同じ人（同じ LINE アカウント）が2台で開いても別の席・別の通信の ID にする
+          // （同じにすると、2台とも同じ席に入ろうとして ID を取り合い、つながらない）
+          return Promise.all([
+            Platform.hashUserId(identity.userId + "#" + Platform.getDeviceId()),
+            Platform.hashUserId(identity.userId)
+          ]).then(function (keys) {
+            // 前の版の印（ID そのもの・端末をまぜない印）のルームや続きにも戻れるように
+            app.legacyUserId = [identity.userId, keys[1]];
+            return keys[0];
+          });
         }).then(function (userKey) {
           app.userId = userKey;
           syncBrowserUrl();
@@ -1059,7 +1077,9 @@
           setTransport("エラー");
           setOpponentStatus("利用不可");
           setMode("停止");
-          setMessage(failed("うまく準備できませんでした。電波のよいところで、ページを開きなおしてね。", error));
+          setMessage(failed(error && error.type === "unavailable-id" ?
+            "このルームは、この端末の別の画面（タブ）でも開いています。片方を閉じてから、開きなおしてね。" :
+            "うまく準備できませんでした。電波のよいところで、ページを開きなおしてね。", error));
         });
       }
     };
