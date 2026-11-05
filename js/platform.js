@@ -277,7 +277,7 @@
       '<div class="ls-sheet-card outside-choice-card">' +
       '<img src="' + getAssetUrl("assets/icon.svg") + '" alt="" width="56" height="56">' +
       '<p id="outsideChoiceTitle" class="ls-sheet-title">ブラウザ版で開いています</p>' +
-      '<p class="ls-hint outside-choice-text">LINE がなくても、このまま友だちと対戦できます（招待はリンクで送ります）。LINE で遊ぶと、名前とアイコンが出て、LINE の友だちを選んで招待できます。</p>' +
+      '<p class="ls-hint outside-choice-text">LINE で遊ぶと、LINE の友だちを選んで招待でき、名前とアイコンも出ます。LINE がなくても、このまま友だちと対戦できます（招待はリンクで送ります）。</p>' +
       '<a class="ls-outside-button is-app outside-choice-button" data-act="app"><span class="ls-icon" data-icon="app" aria-hidden="true"></span>LINE 版で開く</a>' +
       '<button class="ls-outside-button outside-choice-button" type="button" data-act="login"><span class="ls-icon" data-icon="login" aria-hidden="true"></span>ログインして遊ぶ</button>' +
       '<button class="ls-sheet-cancel" type="button" data-act="guest"><span class="ls-icon" data-icon="play" aria-hidden="true"></span>ログインせずに遊ぶ</button>' +
@@ -352,7 +352,7 @@
         return copyInstead(text, "送れなかったので、結果をコピーしました。", "結果を長押ししてコピーしてね");
       });
     }
-    return copyInstead(text, "ブラウザ版なので、結果をコピーしました。トークに貼って送れます。", "結果を長押ししてコピーしてね");
+    return copyInstead(text, "結果をコピーしました。LINE のトークやメッセージに貼って送れます。", "結果を長押ししてコピーしてね");
   }
 
   // 招待をカードで送る。LINE の友だちを選べないとき（ログインしていないブラウザ版など）は、端末の共有（メッセージ・メールなど）で、
@@ -395,7 +395,7 @@
   }
 
   function copyRoomLink(shareUrl) {
-    return copyInstead(shareUrl, "招待のリンクをコピーしました。メッセージやメールに貼って送れます。", "招待のリンクを長押ししてコピーしてね");
+    return copyInstead(shareUrl, "招待のリンクをコピーしました。LINE のトークやメッセージに貼って送れます。", "招待のリンクを長押ししてコピーしてね");
   }
 
   // この端末に残したひっくりの記録を消す（開きなおすとき）

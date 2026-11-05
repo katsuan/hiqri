@@ -1,7 +1,7 @@
 {
   "name": "ひっくり",
   "short_name": "ひっくり",
-  "description": "LINE の友だちと、石をひっくり返して対戦する盤のゲーム（HiQRi）",
+  "description": "LINE で友だちと、石をひっくり返して対戦する盤のゲーム（HiQRi。LINE がなくてもリンクで遊べる）",
   "lang": "ja",
   "start_url": "./",
   "scope": "./",

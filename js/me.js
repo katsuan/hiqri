@@ -17,7 +17,7 @@
       list.push({ iconName: "done", text: (name ? name + " さん" : "LINE") + "でログインしています" });
       list.push({ iconName: "team", text: "友だちとの対戦では、相手にこの名前とアイコンが見えます" });
     } else {
-      list.push({ iconName: "user", text: "まだ LINE にログインしていません。COM との練習と 1台で2人は、このまま遊べます" });
+      list.push({ iconName: "user", text: "まだ LINE にログインしていません。このままでも、リンクで招待して友だちと対戦できます（COM・1台で2人も）" });
     }
     if (s.version) {
       list.push({ iconName: "hash", text: "版 " + s.version });

@@ -9,6 +9,7 @@
     // はじめて開いた人にだけ、短い使い方（Q キット。「わかった」で消え、この端末では二度と出さない）
     if (window.LineShareUI && typeof window.LineShareUI.firstTip === "function") {
       window.LineShareUI.firstTip("hiqri", [
+        "友だちは LINE で招待します。LINE がなくても、リンクを送れば遊べます",
         "置けるマスに点が出ます。押すと石が置けます",
         "📚 教養モードでは、問題に正解すると置けます",
         "友だちを待つあいだは、COM と練習できます"
