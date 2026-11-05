@@ -363,7 +363,7 @@
       });
     }
     return shareByDevice({ title: "ひっくり", text: text, url: getAppBaseUrl() }, withSeason("結果を送りました。"), "送るのをやめました。", function () {
-      return copyInstead(text, "結果をコピーしました。LINE のトークやメッセージに貼って送れます。", "結果を長押ししてコピーしてね");
+      return copyInstead(text, "結果をコピーしました。メッセージやメールに貼って送れます。", "結果を長押ししてコピーしてね");
     });
   }
 
@@ -410,7 +410,7 @@
   }
 
   function copyRoomLink(shareUrl) {
-    return copyInstead(shareUrl, "招待のリンクをコピーしました。LINE のトークやメッセージに貼って送れます。", "招待のリンクを長押ししてコピーしてね");
+    return copyInstead(shareUrl, "招待のリンクをコピーしました。メッセージやメールに貼って送れます。", "招待のリンクを長押ししてコピーしてね");
   }
 
   // この端末に残したひっくりの記録を消す（開きなおすとき）
