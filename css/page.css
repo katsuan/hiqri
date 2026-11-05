@@ -275,38 +275,6 @@ body.is-lobby .board-shell {
   opacity: 0.8;
 }
 
-/* ブラウザ版で開いたときの、ログインするか LINE 版で開くかを選ぶ画面（js/platform.js の showOutsideChoice） */
-.outside-choice {
-  z-index: 1000;
-  align-items: center;
-}
-
-.outside-choice-card {
-  justify-items: center;
-  gap: 8px;
-  width: min(100%, 360px);
-  text-align: center;
-}
-
-.outside-choice-text {
-  margin-bottom: 8px;
-  font-size: 14px;
-}
-
-.outside-choice .ls-sheet-cancel {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-.outside-choice-button {
-  width: 100%;
-  min-height: 48px;
-  font-size: 15px;
-  font-weight: 800;
-}
-
 /* PC：説明文が長いとき（対局中など）に、左の名前とロゴを押しつぶさない */
 @media (min-width: 901px) {
   .top-actions {

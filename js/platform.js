@@ -13,6 +13,17 @@
   });
   // ブラウザ版で、LIFF は起きたがまだログインしていない（ゲスト）か
   var outsideGuest = false;
+  // Q キットの LIFF（shared/liff.js）に、ひっくりの LIFF ID を渡す
+  window.LINE_SHARE_CONFIG = Object.assign({}, window.LINE_SHARE_CONFIG, { liffId: (window.APP_CONFIG || {}).liffId });
+
+  // このブラウザのまま LINE でログインして、今のページ（?room= 付き）に戻る（Q キットの LineShareLiff.login）
+  function login() {
+    if (window.LineShareLiff && typeof window.LineShareLiff.login === "function") {
+      window.LineShareLiff.login();
+      return;
+    }
+    liff.login({ redirectUri: window.location.href });
+  }
 
   // 推測されにくい ID（ルーム ID など。英小文字と数字12文字）
   function generateId(prefix) {
@@ -158,9 +169,16 @@
         return;
       }
 
-      liff.init({
-        liffId: window.APP_CONFIG.liffId
-      }).then(function () {
+      // LIFF を起こすのは Q キット（shared/liff.js の LineShareLiff.init。10秒で終わらなければ、起こせなかったあつかい）
+      var kit = window.LineShareLiff;
+      var started = kit && typeof kit.init === "function" ?
+        kit.init({ login: "none" }).then(function (result) {
+          if (!result.ready) {
+            throw new Error(result.reason || "failed");
+          }
+        }) :
+        liff.init({ liffId: window.APP_CONFIG.liffId });
+      started.then(function () {
         liffDone();
         if (!liff.isLoggedIn()) {
           if (typeof liff.login === "function") {
@@ -173,7 +191,7 @@
               return;
             }
             // ログイン後は今のページ（?room= 付き）に戻す。指定しないと LIFF の入口に戻り、招待されたルームに入れない
-            liff.login({ redirectUri: loginReturnUrl() });
+            login();
             return;
           }
           reject(new Error("LINE にログインできませんでした。"));
@@ -255,45 +273,23 @@
   // LINE 版で開くときは、招待されたルーム（?room=）もそのまま持っていく
   // playAsGuest：「ログインせずに遊ぶ」を押したとき（シートは閉じる。見出しのアイコンから開いたときは閉じるだけ）
   function showOutsideChoice(playAsGuest) {
-    if (document.querySelector(".outside-choice")) {
-      return; // もう開いている
-    }
-    var appUrl = "https://liff.line.me/" + window.APP_CONFIG.liffId + window.location.search;
-    var box = document.createElement("div");
-    box.className = "ls-sheet outside-choice";
-    box.setAttribute("role", "dialog");
-    box.setAttribute("aria-modal", "true");
-    box.setAttribute("aria-labelledby", "outsideChoiceTitle");
-    box.innerHTML =
-      '<div class="ls-sheet-card outside-choice-card">' +
-      '<img src="' + getAssetUrl("assets/icon.svg") + '" alt="" width="56" height="56">' +
-      '<p id="outsideChoiceTitle" class="ls-sheet-title">ブラウザ版で開いています</p>' +
-      '<p class="ls-hint outside-choice-text">LINE で遊ぶと、LINE の友だちを選んで招待でき、名前とアイコンも出ます。LINE がなくても、このまま友だちと対戦できます（招待はリンクで送ります）。</p>' +
-      '<a class="ls-outside-button is-app outside-choice-button" data-act="app"><span class="ls-icon" data-icon="app" aria-hidden="true"></span>LINE 版で開く</a>' +
-      '<button class="ls-outside-button outside-choice-button" type="button" data-act="login"><span class="ls-icon" data-icon="login" aria-hidden="true"></span>ログインして遊ぶ</button>' +
-      '<button class="ls-sheet-cancel" type="button" data-act="guest"><span class="ls-icon" data-icon="play" aria-hidden="true"></span>ログインせずに遊ぶ</button>' +
-      "</div>";
-    box.querySelector('[data-act="app"]').setAttribute("href", appUrl);
-    box.querySelector('[data-act="login"]').addEventListener("click", function () {
-      liff.login({ redirectUri: loginReturnUrl() });
-    });
-    box.querySelector('[data-act="guest"]').addEventListener("click", function () {
-      box.remove();
+    if (!window.LineShareLiff || typeof window.LineShareLiff.outsideChoice !== "function") {
       if (playAsGuest) {
-        playAsGuest();
+        playAsGuest(); // Q キットが読めないときは、そのままゲストで遊べるようにする
       }
+      return;
+    }
+    // シートは Q キットのもの（shared/liff.js の outsideChoice）
+    window.LineShareLiff.outsideChoice({
+      icon: getAssetUrl("assets/icon.svg"),
+      text: "LINE で遊ぶと、LINE の友だちを選んで招待でき、名前とアイコンも出ます。LINE がなくても、このまま友だちと対戦できます（招待はリンクで送ります）。",
+      appUrl: function () { return "https://liff.line.me/" + window.APP_CONFIG.liffId + window.location.search; },
+      loginLabel: "ログインして遊ぶ",
+      guestLabel: "ログインせずに遊ぶ",
+      onGuest: playAsGuest
     });
-    document.body.appendChild(box);
   }
 
-  // ログインの受け渡しで付く一時的なパラメータは外す（おくるんの shared/liff.js と同じ）
-  function loginReturnUrl() {
-    var url = new URL(window.location.href);
-    ["code", "state", "liffClientId", "liffRedirectUri", "error", "error_description", "friendship_status_changed"].forEach(function (key) {
-      url.searchParams.delete(key);
-    });
-    return url.toString();
-  }
 
   // LINE の送り先を選ぶ画面が使えるか（LIFF の準備前は isApiAvailable が例外を出すので、使えないあつかい）
   function canPickTarget() {
