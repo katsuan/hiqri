@@ -259,9 +259,10 @@
     }
   }
 
-  // ブラウザ版で開いたとき：「LINE 版で開く」「ログインして遊ぶ」か、ログインせずに COM・1台で2人で遊ぶかを選ぶ（キロっく・おくるんと同じ考え方）。
+  // ブラウザ版で開いたとき：「LINE 版で開く」「ログインして遊ぶ」か、ログインせずに遊ぶかを選ぶ（キロっく・おくるんと同じ考え方）。
+  // ログインしなくても友だちと対戦できる（招待はリンクで送る）。LINE で遊ぶと、名前とアイコンが出て、LINE の友だちを選んで招待できる
   // LINE 版で開くときは、招待されたルーム（?room=）もそのまま持っていく
-  // playAsGuest：「ログインせずに練習する」を押したとき（シートは閉じる。見出しのアイコンから開いたときは閉じるだけ）
+  // playAsGuest：「ログインせずに遊ぶ」を押したとき（シートは閉じる。見出しのアイコンから開いたときは閉じるだけ）
   function showOutsideChoice(playAsGuest) {
     if (document.querySelector(".outside-choice")) {
       return; // もう開いている
@@ -276,10 +277,10 @@
       '<div class="ls-sheet-card outside-choice-card">' +
       '<img src="' + getAssetUrl("assets/icon.svg") + '" alt="" width="56" height="56">' +
       '<p id="outsideChoiceTitle" class="ls-sheet-title">ブラウザ版で開いています</p>' +
-      '<p class="ls-hint outside-choice-text">友だちとの対戦は、下のどちらかで遊べます。COM との練習は、このまま遊べます。</p>' +
-      '<a class="ls-outside-button is-app outside-choice-button" data-act="app">📱 LINE 版で開く</a>' +
-      '<button class="ls-outside-button outside-choice-button" type="button" data-act="login">🔑 ログインして遊ぶ</button>' +
-      '<button class="ls-sheet-cancel" type="button" data-act="guest"><span class="ls-icon" data-icon="bot" aria-hidden="true"></span>ログインせずに練習する</button>' +
+      '<p class="ls-hint outside-choice-text">LINE がなくても、このまま友だちと対戦できます（招待はリンクで送ります）。LINE で遊ぶと、名前とアイコンが出て、LINE の友だちを選んで招待できます。</p>' +
+      '<a class="ls-outside-button is-app outside-choice-button" data-act="app"><span class="ls-icon" data-icon="app" aria-hidden="true"></span>LINE 版で開く</a>' +
+      '<button class="ls-outside-button outside-choice-button" type="button" data-act="login"><span class="ls-icon" data-icon="login" aria-hidden="true"></span>ログインして遊ぶ</button>' +
+      '<button class="ls-sheet-cancel" type="button" data-act="guest"><span class="ls-icon" data-icon="play" aria-hidden="true"></span>ログインせずに遊ぶ</button>' +
       "</div>";
     box.querySelector('[data-act="app"]').setAttribute("href", appUrl);
     box.querySelector('[data-act="login"]').addEventListener("click", function () {
@@ -354,7 +355,8 @@
     return copyInstead(text, "ブラウザ版なので、結果をコピーしました。トークに貼って送れます。", "結果を長押ししてコピーしてね");
   }
 
-  // 招待をカードで送る（ブラウザ版・送れないときはリンクをコピー）。返すもの：{ status, message }
+  // 招待をカードで送る。LINE の友だちを選べないとき（ログインしていないブラウザ版など）は、端末の共有（メッセージ・メールなど）で、
+  // それもなければリンクをコピー。リンク（liff.line.me）は、LINE がない人が開いてもブラウザ版に移る。返すもの：{ status, message }
   function shareRoom(roomId, url) {
     return buildShareUrl(roomId, url).then(function (shareUrl) {
       if (canPickTarget()) {
@@ -373,8 +375,27 @@
         });
       }
 
-      return copyInstead(shareUrl, "ブラウザ版なので、招待のリンクをコピーしました。トークに貼って送れます。", "招待のリンクを長押ししてコピーしてね");
+      return shareByDevice(shareUrl);
     });
+  }
+
+  // 端末の共有で招待のリンクを送る（できなければコピー）
+  function shareByDevice(shareUrl) {
+    if (!navigator.share) {
+      return copyRoomLink(shareUrl);
+    }
+    return navigator.share({ title: "ひっくり", text: "ひっくりで対戦しよう", url: shareUrl }).then(function () {
+      return { status: "shared", message: withSeason("招待を送りました。友だちの参加を待っています。") };
+    }).catch(function (error) {
+      if (error && error.name === "AbortError") {
+        return { status: "cancelled", message: "招待を送るのをやめました。" };
+      }
+      return copyRoomLink(shareUrl);
+    });
+  }
+
+  function copyRoomLink(shareUrl) {
+    return copyInstead(shareUrl, "招待のリンクをコピーしました。メッセージやメールに貼って送れます。", "招待のリンクを長押ししてコピーしてね");
   }
 
   // この端末に残したひっくりの記録を消す（開きなおすとき）
@@ -420,6 +441,7 @@
     liffReady: function () {
       return liffReadyPromise;
     },
+    canPickTarget: canPickTarget,
     isOutsideGuest: function () {
       return outsideGuest;
     },

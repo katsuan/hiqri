@@ -125,6 +125,7 @@
       newRoomButton: documentRef.getElementById("newRoomButton"),
       startChoices: documentRef.getElementById("startChoices"),
       newFriendRoomButton: documentRef.getElementById("newFriendRoomButton"),
+      newFriendRoomSub: documentRef.querySelector("#newFriendRoomButton .start-choice-sub"),
       newComRoomButton: documentRef.getElementById("newComRoomButton"),
       newLocalRoomButton: documentRef.getElementById("newLocalRoomButton"),
       hostSetupColorSlot: documentRef.getElementById("hostSetupColorSlot"),
@@ -763,6 +764,10 @@
         setHidden(elements.copyRoomIdButton, !app.roomId);
         setHidden(elements.roomActionRow, !app.roomId || isSolo);
         setHidden(elements.shareButton, !roomFlow.showShare);
+        // LINE の友だちを選べるときは「LINEで招待」、ログインしていないブラウザ版などはリンクで招待
+        var lineInvite = !!(window.OthelloPlatform && window.OthelloPlatform.canPickTarget && window.OthelloPlatform.canPickTarget());
+        setLabel(elements.shareButton, lineInvite ? "message-circle" : "share", lineInvite ? "LINEで招待" : "招待を送る");
+        setText(elements.newFriendRoomSub, lineInvite ? "LINEで招待する" : "リンクで招待する");
         // ルームがないときは「友だちと対戦／COMと練習」を主役にし、折りたたみの「別の対局を作る」は出さない
         setHidden(elements.startChoices, !!app.roomId);
         setHidden(elements.newRoomButton, !app.roomId);
