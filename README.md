@@ -187,15 +187,7 @@ GitHub Actions 配信では `GITHUB_SHA` を使って自動更新されます。
 
 ## テスト
 
-```sh
-node --test test/
-```
-
-画面に触らない部分を確かめます。
-
-- 盤のルール（`game.test.js`）・問題の作り方と答え合わせ（`quiz.test.js`）・数式の文字の無害化（`tex.test.js`）
-- 画面に出す文（`room-text.test.js`）・案内の文が今のボタンの名前を指すか（`words.test.js`）・せまい画面と暗い表示の決まり（`layout.test.js`）・本人のシート（`me.test.js`）・カード（`cards.test.js`）・季節の絵文字（`season.test.js`）
-- 相手から届く中身の確かめ（`peer-guard.test.js`・`play-peer.test.js`）・ルームの出入りと再接続（`session.test.js`・`connection.test.js`・`webrtc.test.js`）
+テストは、公開しない別の所に置いています（公開の前に GitHub Actions が読んで動かします）。画面に触らない部分（盤のルール・問題・画面に出す文・相手から届く中身の確かめ・ルームの出入りなど）を確かめます。
 
 手元で `node ~/GitHub/q-oqrn/tools/qtest/check-code.mjs .` も通してから push します。
 
