@@ -854,7 +854,14 @@
         onConnectionOpen: play.startP2PPlay,
         onData: play.handlePeerData,
         onConnectionClose: function () { play.handleLinkLost("相手との接続が切れました。"); },
-        onConnectionError: function (error) { play.handleLinkLost(failed("相手との通信がうまくいきませんでした。", error)); },
+        onConnectionError: function (error) {
+          // 直接も中継でもつなげなかった（回線の組み合わせ。モバイル回線と会社の Wi-Fi など）
+          if (error && error.type === "negotiation-failed") {
+            play.handleLinkLost(failed("回線の組み合わせで、相手とつなげませんでした。どちらかが別の回線（Wi-Fi とモバイル回線を切りかえるなど）でためしてね。", error));
+            return;
+          }
+          play.handleLinkLost(failed("相手との通信がうまくいきませんでした。", error));
+        },
         // PeerJS のまちがい。つなぎにいった相手がまだいないだけなら知らせずに次の試しを待つ（相手が戻れば、どちらかからつながる）
         onPeerError: function (error) {
           // つなぎにいった相手がいまいないだけなら、知らせずに次の試しを待つ（相手が戻れば、どちらかからつながる）
