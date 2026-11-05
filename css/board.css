@@ -568,6 +568,24 @@
   }
 }
 
+/* PC：盤を画面の高さに収めて、札と盤がスクロールなしで一度に見えるようにする（200px は札・余白のぶん） */
+@media (min-width: 901px) {
+  .board-stage {
+    width: min(100%, max(360px, calc(100vh - 200px)));
+    margin-inline: auto;
+  }
+
+  /* はじめの画面は盤がないので、遊び方・接続情報を横いっぱいに2つ並べる */
+  body.is-lobby .board-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  body.is-lobby .sidebar {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+}
+
 @media (max-width: 640px) {
   .host-setup-grid {
     gap: 8px;

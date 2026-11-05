@@ -129,6 +129,7 @@ body.is-lobby .board-shell {
   gap: 16px;
   min-width: 260px;
   min-height: 212px;
+  align-content: start; /* 中身が少ないとき（COM の練習など）に、折りたたみが縦にのびない */
 }
 
 .room-overview {
@@ -304,6 +305,13 @@ body.is-lobby .board-shell {
   min-height: 48px;
   font-size: 15px;
   font-weight: 800;
+}
+
+/* PC：説明文が長いとき（対局中など）に、左の名前とロゴを押しつぶさない */
+@media (min-width: 901px) {
+  .top-actions {
+    max-width: 520px;
+  }
 }
 
 @media (max-width: 900px) {
