@@ -17,10 +17,6 @@ body {
   background: var(--ls-bg); /* 平らな色（グラデーションにしない） */
 }
 
-.hidden {
-  display: none !important;
-}
-
 /* 入力欄を押したときの縁（Q キットは紫で決まっているので、ひっくりの緑に） */
 .ls-input:focus {
   box-shadow: 0 0 0 3px rgba(31, 122, 69, 0.2);

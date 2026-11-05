@@ -66,15 +66,15 @@
             </button>
           </div>
           <!-- 招待中は「LINEで招待」（LINE の友だちを選べないときは「招待を送る」）をいちばん上に。ルームIDは口で伝えたいとき用 -->
-          <div id="roomActionRow" class="button-row room-action-row hidden">
+          <div id="roomActionRow" class="button-row room-action-row" hidden>
             <button id="shareButton" class="ls-button is-primary" type="button"><span class="ls-icon" data-icon="message-circle" aria-hidden="true"></span>LINEで招待</button>
           </div>
           <!-- ルームIDとコピーは1行に（スマホで縦に場所を取らない） -->
-          <div id="roomCurrentRow" class="room-current-row hidden">
+          <div id="roomCurrentRow" class="room-current-row" hidden>
             <div id="roomCurrentId" class="room-current-id">room-xxxxxx</div>
             <button id="copyRoomIdButton" class="ls-button" type="button"><span class="ls-icon" data-icon="copy" aria-hidden="true"></span>コピー</button>
           </div>
-          <div id="roomCurrentActions" class="button-row room-current-actions hidden">
+          <div id="roomCurrentActions" class="button-row room-current-actions" hidden>
             <button id="quickReconnectButton" class="ls-button" type="button"><span class="ls-icon" data-icon="refresh" aria-hidden="true"></span>再接続</button>
           </div>
         </div>
@@ -100,7 +100,7 @@
       <div class="ls-panel board-shell">
         <!-- 対局の準備：上から「対戦相手 → 盤面 → ルール（→ 問題）→ 色 → START」。
              短い選択を先に、教養で広がる問題の一覧を後ろに置き、そのすぐ下で START できるようにする -->
-        <div id="hostSetupPanel" class="host-setup-panel hidden">
+        <div id="hostSetupPanel" class="host-setup-panel" hidden>
           <div class="setup-heading">対局の準備</div>
           <div id="hostSetupOpponentSlot" class="rule-row setup-opponent">
             <span class="host-setup-label">対戦相手</span>
@@ -112,7 +112,7 @@
           </div>
           <!-- ルール（ホストが決める）。教養モードは問題に正解すると石を置ける -->
           <div id="ruleSetup" class="rule-setup">
-            <p id="rulePostGameNote" class="small rule-post-game hidden">対局が終わりました。ルールを変えると、相手といっしょに次の対局の準備に移ります。</p>
+            <p id="rulePostGameNote" class="small rule-post-game" hidden>対局が終わりました。ルールを変えると、相手といっしょに次の対局の準備に移ります。</p>
             <div class="rule-row">
               <span class="host-setup-label">盤面</span>
               <div id="sizeChoices" class="ls-chips"></div>
@@ -124,7 +124,7 @@
                 <button id="ruleQuizButton" class="ls-chip" aria-pressed="false" type="button">📚 教養</button>
               </div>
             </div>
-            <div id="quizRuleRows" class="hidden">
+            <div id="quizRuleRows" hidden>
               <div class="small host-setup-hint">置けるマスを押すと4択の問題が出ます。正解すると石を置けます。不正解のときはライフが減ってもう一度選べ、ライフがなければ相手の番です。石の数が同じなら、ライフが多いほうの勝ちです。</div>
               <div class="rule-row">
                 <span class="host-setup-label">回答</span>
@@ -133,7 +133,7 @@
                   <button class="ls-chip" aria-pressed="false" type="button" data-answer-mode="input"><span class="ls-icon" data-icon="edit" aria-hidden="true"></span>入力</button>
                 </div>
               </div>
-              <div id="answerModeNote" class="small host-setup-hint hidden">入力：漢字の読み（ひらがな）・数学・一般教養は文字で答えます。英単語・ことわざ・四字熟語の意味は4択のままです。</div>
+              <div id="answerModeNote" class="small host-setup-hint" hidden>入力：漢字の読み（ひらがな）・数学・一般教養は文字で答えます。英単語・ことわざ・四字熟語の意味は4択のままです。</div>
               <div class="rule-row">
                 <span class="host-setup-label">ライフ</span>
                 <div id="lifeChoices" class="ls-chips"></div>
@@ -147,7 +147,7 @@
               <div id="pickRows" class="pick-rows"></div>
             </div>
           </div>
-          <div id="ruleSummary" class="small rule-summary hidden"></div>
+          <div id="ruleSummary" class="small rule-summary" hidden></div>
 
           <div class="host-setup-grid">
             <div id="hostSetupColorSlot" class="host-setup-slot">
@@ -162,11 +162,11 @@
             <div id="controlHint" class="small host-setup-hint">黒が先手です。ボタンで自分の色だけを切り替えます。</div>
           </div>
 
-          <button id="setupStartButton" class="ls-button is-primary is-block setup-start-button hidden" type="button">START</button>
+          <button id="setupStartButton" class="ls-button is-primary is-block setup-start-button" hidden type="button">START</button>
 
         </div>
 
-        <div id="ruleBadge" class="rule-badge hidden"></div>
+        <div id="ruleBadge" class="rule-badge" hidden></div>
 
         <div class="board-head">
           <div id="myCard" class="player-card">
@@ -195,7 +195,7 @@
           </div>
         </div>
 
-        <div id="reconnectNotice" class="status-banner hidden">
+        <div id="reconnectNotice" class="status-banner" hidden>
           <div id="reconnectText">接続状態を確認しています。</div>
           <div class="ls-actions">
             <button id="retryReconnectButton" class="ls-button" type="button"><span class="ls-icon" data-icon="refresh" aria-hidden="true"></span>再接続する</button>
@@ -203,7 +203,7 @@
           </div>
         </div>
 
-        <div id="resumeNotice" class="status-banner hidden">
+        <div id="resumeNotice" class="status-banner" hidden>
           <div id="resumeText">相手が戻りました。どこから続けるか選べます。</div>
           <div id="resumeActions" class="ls-actions">
             <button id="resumeContinueButton" class="ls-button is-primary" type="button">今の盤面から再開</button>
@@ -213,21 +213,21 @@
 
         <div class="board-stage">
           <div id="board" class="board" aria-label="盤"></div>
-          <div id="quizOverlay" class="ls-sheet quiz-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="quizText">
+          <div id="quizOverlay" class="ls-sheet quiz-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="quizText">
             <div class="ls-sheet-card quiz-card">
               <!-- 相手が答えているときだけ出す（見るだけ。「隠す」で以後は出さない） -->
-              <div id="quizWatchHead" class="quiz-watch-head hidden">
+              <div id="quizWatchHead" class="quiz-watch-head" hidden>
                 <span id="quizWatchTitle"><span class="ls-icon" data-icon="view" aria-hidden="true"></span>相手が回答中…</span>
                 <button id="quizWatchHide" class="quiz-watch-toggle" type="button">隠す</button>
               </div>
               <div class="quiz-meta">
                 <div id="quizGenre" class="quiz-genre"></div>
-                <div id="quizCountdown" class="quiz-countdown hidden" aria-live="off"></div>
+                <div id="quizCountdown" class="quiz-countdown" hidden aria-live="off"></div>
               </div>
               <div id="quizText" class="quiz-text"></div>
               <div id="quizChoices" class="quiz-choices"></div>
               <!-- 入力で答えるとき（ひらがな・カタカナ、全角・半角はどちらでもよい） -->
-              <form id="quizInputForm" class="quiz-input hidden" autocomplete="off">
+              <form id="quizInputForm" class="quiz-input" hidden autocomplete="off">
                 <input id="quizInput" class="ls-input quiz-input-field" type="text" inputmode="text" enterkeyhint="done"
                   autocapitalize="off" spellcheck="false" placeholder="答えを入力" aria-label="答え">
                 <button id="quizInputSubmit" class="ls-button is-primary quiz-input-submit" type="submit">答える</button>
@@ -236,15 +236,15 @@
               <button id="quizGiveUp" class="ls-button quiz-give-up" type="button">わからない（相手の番にする）</button>
             </div>
           </div>
-          <button id="quizWatchPill" class="quiz-watch-pill hidden" type="button"><span id="quizWatchPillText">相手が回答中…</span><span><span class="ls-icon" data-icon="view" aria-hidden="true"></span>見る</span></button>
-          <div id="startOverlay" class="start-overlay hidden">
+          <button id="quizWatchPill" class="quiz-watch-pill" hidden type="button"><span id="quizWatchPillText">相手が回答中…</span><span><span class="ls-icon" data-icon="view" aria-hidden="true"></span>見る</span></button>
+          <div id="startOverlay" class="start-overlay" hidden>
             <div class="start-card">
               <div id="startWord" class="start-word">START</div>
               <div id="startCaption" class="start-caption">ホストが開始を準備しています。</div>
               <button id="startButton" class="ls-button is-primary start-button" type="button">START</button>
             </div>
           </div>
-          <div id="resultOverlay" class="result-overlay hidden">
+          <div id="resultOverlay" class="result-overlay" hidden>
             <div id="resultCard" class="result-card">
               <div id="resultWord" class="result-word">WIN</div>
               <div id="resultCaption" class="result-caption">このルームで続けてもう一戦しますか？</div>

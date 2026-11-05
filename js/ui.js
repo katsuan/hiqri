@@ -11,6 +11,18 @@
     }
   }
 
+  // 線アイコン（Q キットの LineShareUI.icon。キットがまだ読めていないときだけ、同じ形を作る）
+  function lineIcon(name) {
+    if (window.LineShareUI && typeof window.LineShareUI.icon === "function") {
+      return window.LineShareUI.icon(name);
+    }
+    var icon = document.createElement("span");
+    icon.className = "ls-icon";
+    icon.setAttribute("data-icon", name);
+    icon.setAttribute("aria-hidden", "true");
+    return icon;
+  }
+
   // ボタンの「線アイコン＋する言葉」（Q キットの ls-icon）。iconName が空なら文字だけ。同じ中身なら書き直さない
   function setLabel(element, iconName, text) {
     if (!element) {
@@ -23,11 +35,7 @@
     element.setAttribute("data-label", key);
     element.textContent = "";
     if (iconName) {
-      var icon = document.createElement("span");
-      icon.className = "ls-icon";
-      icon.setAttribute("data-icon", iconName);
-      icon.setAttribute("aria-hidden", "true");
-      element.appendChild(icon);
+      element.appendChild(lineIcon(iconName));
     }
     element.appendChild(document.createTextNode(text));
   }
@@ -42,11 +50,7 @@
     if (!element) {
       return;
     }
-    if (shouldHide) {
-      element.classList.add("hidden");
-    } else {
-      element.classList.remove("hidden");
-    }
+    element.hidden = !!shouldHide; // Q キットの [hidden]（ui.css）で隠す
   }
 
   // Q キットのチップ（ls-chip）の「選んでいる」
@@ -459,7 +463,7 @@
       var showStart = RoomText.shouldShowStartOverlay(app);
       // 準備の欄が出ているときは、その一番下にも START を出す（盤面までスクロールしなくてよい）。
       // 盤面の上の START も同じように押せる（どちらも同じ表示・同じ動き）
-      var startInSetup = showStart && !elements.hostSetupPanel.classList.contains("hidden");
+      var startInSetup = showStart && !elements.hostSetupPanel.hidden;
       setHidden(elements.startOverlay, !showStart);
       setHidden(elements.startButton, !showStart);
       setHidden(elements.setupStartButton, !startInSetup);
