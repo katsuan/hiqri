@@ -927,11 +927,9 @@
               setMessage("コピーできるルームIDがまだありません。");
               return;
             }
-            Platform.copyText(app.roomId).then(function (copied) {
-              if (copied) {
-                setMessage("ルームIDをコピーしました。");
-              } else {
-                Platform.showCopyBox("ルームIDを長押ししてコピーしてね", app.roomId);
+            Platform.copyInstead(app.roomId, "ルームIDをコピーしました。", "ルームIDを長押ししてコピーしてね").then(function (result) {
+              if (result.message) {
+                setMessage(result.message);
               }
             });
           },

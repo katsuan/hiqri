@@ -225,34 +225,6 @@
     });
   }
 
-  // 文字をコピーする。できたら true
-  function copyText(text) {
-    var textarea;
-
-    if (!text) {
-      return Promise.resolve(false);
-    }
-
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      return navigator.clipboard.writeText(text).then(function () {
-        return true;
-      }).catch(function () {
-        return false;
-      });
-    }
-
-    textarea = document.createElement("textarea");
-    textarea.value = text;
-    textarea.setAttribute("readonly", "readonly");
-    textarea.style.position = "absolute";
-    textarea.style.left = "-9999px";
-    document.body.appendChild(textarea);
-    textarea.select();
-    document.execCommand("copy");
-    document.body.removeChild(textarea);
-    return Promise.resolve(true);
-  }
-
   // 招待に入れるルームの URL（LINE 版の URL があればそれ）
   function buildShareUrl(roomId, url) {
     var directLiffUrl = buildLiffRoomUrl(roomId);
@@ -335,21 +307,14 @@
     }
   }
 
-  // コピーできないときは、選べる文字をシートで出す（ブラウザの小窓は使わない）
-  function showCopyBox(title, text) {
-    if (window.LineShareUI && typeof window.LineShareUI.ask === "function") {
-      window.LineShareUI.ask({ title: title, input: text, readonly: true, ok: "閉じる", cancel: null });
-    }
-  }
-
-  // LINE で送れないときはコピー。コピーもできないときは選べる文字で出す
+  // コピーする（Q キットの LineShareUI.copy。できないときは、長押しで選べる文字の窓を出す）。返すもの：{ status, message }
   function copyInstead(text, copiedMessage, boxTitle) {
-    return copyText(text).then(function (copied) {
-      if (copied) {
-        return { status: "copied", message: copiedMessage };
-      }
-      showCopyBox(boxTitle, text);
-      return { status: "manual", message: "" };
+    if (!text || !window.LineShareUI || typeof window.LineShareUI.copy !== "function") {
+      return Promise.resolve({ status: "manual", message: "" });
+    }
+    // 知らせは呼んだ側が出すので、キットのトーストは出さない（done に何もしない関数）
+    return window.LineShareUI.copy(text, { done: function () {}, title: boxTitle }).then(function (copied) {
+      return copied ? { status: "copied", message: copiedMessage } : { status: "manual", message: "" };
     });
   }
 
@@ -479,8 +444,7 @@
     },
     showOutsideChoice: showOutsideChoice,
     loadVersionInfo: loadVersionInfo,
-    copyText: copyText,
-    showCopyBox: showCopyBox,
+    copyInstead: copyInstead,
     shareRoom: shareRoom,
     shareResult: shareResult,
     reload: reload
