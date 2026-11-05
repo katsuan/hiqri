@@ -764,10 +764,16 @@
         setHidden(elements.copyRoomIdButton, !app.roomId);
         setHidden(elements.roomActionRow, !app.roomId || isSolo);
         setHidden(elements.shareButton, !roomFlow.showShare);
-        // LINE の友だちを選べるときは「LINEで招待」、ログインしていないブラウザ版などはリンクで招待
-        var lineInvite = !!(window.OthelloPlatform && window.OthelloPlatform.canPickTarget && window.OthelloPlatform.canPickTarget());
+        // LINE の友だちを選べるときは「LINEで招待」、ログインしていないブラウザ版などはリンクで招待（Platform.useLineWords）
+        var lineInvite = !window.OthelloPlatform || !window.OthelloPlatform.useLineWords || window.OthelloPlatform.useLineWords();
         setLabel(elements.shareButton, lineInvite ? "message-circle" : "share", lineInvite ? "LINEで招待" : "招待を送る");
         setText(elements.newFriendRoomSub, lineInvite ? "LINEで招待する" : "リンクで招待する");
+        // 結果を送るボタン：LINE なら「カードでおくるん」（LINE の緑）、そうでなければ「結果を送る」（端末の共有）
+        if (elements.resultShareButton) {
+          elements.resultShareButton.classList.toggle("line", lineInvite);
+          elements.resultShareButton.classList.toggle("is-oqrn", lineInvite);
+          setLabel(elements.resultShareButton, lineInvite ? "" : "share", lineInvite ? "カードでおくるん" : "結果を送る");
+        }
         // ルームがないときは「友だちと対戦／COMと練習」を主役にし、折りたたみの「別の対局を作る」は出さない
         setHidden(elements.startChoices, !!app.roomId);
         setHidden(elements.newRoomButton, !app.roomId);

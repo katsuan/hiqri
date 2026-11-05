@@ -997,7 +997,8 @@
                 if (result.message) {
                   setMessage(result.message);
                 }
-                return result.status === "shared";
+                // 「続けて別のトークにも送る」は LINE で送ったときだけ
+                return result.status === "shared" && !!result.line;
               });
             };
             send().then(function (sent) {

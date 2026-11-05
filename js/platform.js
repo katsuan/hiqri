@@ -4,8 +4,12 @@
   var identityPromise = null;
   // LIFF を起こし終えた（起こせなかった・手元で試すときも）約束。見出しの本人のアイコン（js/me.js）が待つ。LIFF を2回起こさない
   var liffDone = function () {};
+  var liffSettled = false;
   var liffReadyPromise = new Promise(function (resolve) {
-    liffDone = resolve;
+    liffDone = function () {
+      liffSettled = true;
+      resolve();
+    };
   });
   // ブラウザ版で、LIFF は起きたがまだログインしていない（ゲスト）か
   var outsideGuest = false;
@@ -339,12 +343,18 @@
     return window.QSeason && typeof window.QSeason.decorate === "function" ? window.QSeason.decorate(text) : text;
   }
 
-  // 対局の結果をカードで送る（ブラウザ版・送れないときはコピー）。返すもの：{ status, message }
+  // LINE で送る言い方（「LINEで招待」「カードでおくるん」）にするか。LINE の友だちを選べるとき。
+  // LIFF を起こし終える前は、主な入り方の LINE のほうにしておく（LINE の中で、一瞬リンクの言い方が出ないように）
+  function useLineWords() {
+    return !liffSettled || canPickTarget();
+  }
+
+  // 対局の結果をカードで送る。LINE の友だちを選べないときは、端末の共有で（なければコピー）。返すもの：{ status, message, line }
   function shareResult(info) {
     var text = "ひっくりの結果：" + info.myName + " " + info.mine + " - " + info.theirs + " " + info.opponentName;
     if (canPickTarget()) {
       return liff.shareTargetPicker([window.OthelloCard.result(info)]).then(function (result) {
-        return { status: result ? "shared" : "cancelled", message: result ? withSeason("結果を送りました。") : "送るのをやめました。" };
+        return { status: result ? "shared" : "cancelled", message: result ? withSeason("結果を送りました。") : "送るのをやめました。", line: true };
       }).catch(function (error) {
         if (window.console) {
           window.console.warn("[ひっくり] 結果を送れませんでした", error);
@@ -352,7 +362,9 @@
         return copyInstead(text, "送れなかったので、結果をコピーしました。", "結果を長押ししてコピーしてね");
       });
     }
-    return copyInstead(text, "結果をコピーしました。LINE のトークやメッセージに貼って送れます。", "結果を長押ししてコピーしてね");
+    return shareByDevice({ title: "ひっくり", text: text, url: getAppBaseUrl() }, withSeason("結果を送りました。"), "送るのをやめました。", function () {
+      return copyInstead(text, "結果をコピーしました。LINE のトークやメッセージに貼って送れます。", "結果を長押ししてコピーしてね");
+    });
   }
 
   // 招待をカードで送る。LINE の友だちを選べないとき（ログインしていないブラウザ版など）は、端末の共有（メッセージ・メールなど）で、
@@ -375,22 +387,25 @@
         });
       }
 
-      return shareByDevice(shareUrl);
+      return shareByDevice({ title: "ひっくり", text: "ひっくりで対戦しよう", url: shareUrl },
+        withSeason("招待を送りました。友だちの参加を待っています。"), "招待を送るのをやめました。", function () {
+          return copyRoomLink(shareUrl);
+        });
     });
   }
 
-  // 端末の共有で招待のリンクを送る（できなければコピー）
-  function shareByDevice(shareUrl) {
+  // 端末の共有（メッセージ・メールなど）で送る。できなければ copy（コピーする）。返すもの：{ status, message }
+  function shareByDevice(data, sentMessage, cancelMessage, copy) {
     if (!navigator.share) {
-      return copyRoomLink(shareUrl);
+      return copy();
     }
-    return navigator.share({ title: "ひっくり", text: "ひっくりで対戦しよう", url: shareUrl }).then(function () {
-      return { status: "shared", message: withSeason("招待を送りました。友だちの参加を待っています。") };
+    return navigator.share(data).then(function () {
+      return { status: "shared", message: sentMessage };
     }).catch(function (error) {
       if (error && error.name === "AbortError") {
-        return { status: "cancelled", message: "招待を送るのをやめました。" };
+        return { status: "cancelled", message: cancelMessage };
       }
-      return copyRoomLink(shareUrl);
+      return copy();
     });
   }
 
@@ -442,6 +457,7 @@
       return liffReadyPromise;
     },
     canPickTarget: canPickTarget,
+    useLineWords: useLineWords,
     isOutsideGuest: function () {
       return outsideGuest;
     },
