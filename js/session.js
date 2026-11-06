@@ -27,7 +27,7 @@
     return nextParams.toString() ? (baseUrl + "?" + nextParams.toString()) : baseUrl;
   }
 
-  var WATCH_STORAGE_KEY = "hiqri-watch-opponent";
+  var WATCH_STORAGE_KEY = "hiqri:watch-opponent";
   var OLD_WATCH_STORAGE_KEY = "othello:watch-opponent"; // 前の名前。残っていたら引きつぐ
 
   // 相手が答える問題を見るか（この端末の設定。はじめは見る）
