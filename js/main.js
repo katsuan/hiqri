@@ -2,7 +2,7 @@
 // 古い index.html を覚えている端末のために、新しいファイルを読むだけ。2026-11-25 ごろ消す
 (function (document) {
   var base = document.currentScript ? document.currentScript.src : document.baseURI;
-  var files = (window.OthelloCard ? [] : ["card.js"]).concat(["../app.js"]);
+  var files = (window.HiqriCard ? [] : ["card.js"]).concat(["../app.js"]);
   (function next() {
     var file = files.shift();
     if (!file) return;

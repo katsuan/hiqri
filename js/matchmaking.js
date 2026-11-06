@@ -1,4 +1,4 @@
-// ルームの席（OthelloMatchmaking）：ホスト・ゲストのどちらで入るかを決め、ルームの文書に席を書く。
+// ルームの席（HiqriMatchmaking）：ホスト・ゲストのどちらで入るかを決め、ルームの文書に席を書く。
 // session.js から使う。読み書きは firebase.js
 (function (window) {
   // ルームの中身と自分から、入り方を決める（create-host・resume-host・resume-guest・join-guest・full・missing）。
@@ -99,7 +99,7 @@
     return role === "host" ? (roomData.guestPeerId || "") : (roomData.hostPeerId || "");
   }
 
-  window.OthelloMatchmaking = {
+  window.HiqriMatchmaking = {
     init: init,
     resolveEntry: resolveEntry,
     fetchRoom: fetchRoom,

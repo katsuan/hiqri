@@ -1,9 +1,9 @@
-// 画面の状態とルーム（OthelloSession）：本人を決め、ルームに入り（ホスト・ゲスト）、相手とつなぎ、ボタンを対局の処理につなぐ。
+// 画面の状態とルーム（HiqriSession）：本人を決め、ルームに入り（ホスト・ゲスト）、相手とつなぎ、ボタンを対局の処理につなぐ。
 // この端末に対局の続きを残し、開きなおしたら戻す。app.js が create().bootstrap() で始める。対局の進め方は play.js、描くのは ui.js
 (function (window) {
-  var Game = window.OthelloGame;
-  var Platform = window.OthelloPlatform;
-  var Matchmaking = window.OthelloMatchmaking;
+  var Game = window.HiqriGame;
+  var Platform = window.HiqriPlatform;
+  var Matchmaking = window.HiqriMatchmaking;
   var P2P_TIMEOUT_MS = 5000;
   var LOBBY_ROOM_ID = "lobby";
 
@@ -27,12 +27,21 @@
     return nextParams.toString() ? (baseUrl + "?" + nextParams.toString()) : baseUrl;
   }
 
-  var WATCH_STORAGE_KEY = "othello:watch-opponent";
+  var WATCH_STORAGE_KEY = "hiqri-watch-opponent";
+  var OLD_WATCH_STORAGE_KEY = "othello:watch-opponent"; // 前の名前。残っていたら引きつぐ
 
   // 相手が答える問題を見るか（この端末の設定。はじめは見る）
   function loadWatchOpponent() {
     try {
-      return window.localStorage.getItem(WATCH_STORAGE_KEY) !== "0";
+      var saved = window.localStorage.getItem(WATCH_STORAGE_KEY);
+      if (saved === null) {
+        saved = window.localStorage.getItem(OLD_WATCH_STORAGE_KEY);
+        if (saved !== null) {
+          window.localStorage.setItem(WATCH_STORAGE_KEY, saved);
+          window.localStorage.removeItem(OLD_WATCH_STORAGE_KEY);
+        }
+      }
+      return saved !== "0";
     } catch (error) {
       return true;
     }
@@ -90,7 +99,7 @@
       rematch: { outgoing: false, incoming: false },
       game: Game.createFreshGame(),
       // ルール（ふつう / 教養・盤面の大きさ・ジャンル・レベル・問題の種）。ホストが決めて相手に送る
-      rules: window.OthelloQuiz.normalizeRules({}),
+      rules: window.HiqriQuiz.normalizeRules({}),
       // 教養モード：マスごとの不正解の回数（次はそのマスで別の問題になる）と、表示中の問題
       quizAttempts: {},
       // 不正解のあとにマスへ割り当てた問題の位置（盤面で問題が重ならないように）と、残りのライフ
@@ -117,7 +126,7 @@
 
   // 画面の状態とルームの処理を作る。返すもの：{ bootstrap }
   function create() {
-    var ui = window.OthelloUI.create(window.document);
+    var ui = window.HiqriUI.create(window.document);
     var app = createState(ui);
     var storagePrefix = "liff-p2p-session-";
 
@@ -337,7 +346,7 @@
         app.game = saved.game;
       }
       if (saved.rules) {
-        app.rules = window.OthelloQuiz.normalizeRules(saved.rules);
+        app.rules = window.HiqriQuiz.normalizeRules(saved.rules);
         app.quizAttempts = saved.quizAttempts || {};
         app.quizRetries = saved.quizRetries || {};
         app.quizLives = saved.quizLives || freshLives();
@@ -370,7 +379,7 @@
       app.startWithLocal = params.get("opponent") === "local";
       // ルーム ID は英数字と - _ だけ（ほかの文字が入った URL は、ルームなしで開く）
       var roomParam = params.get("room") || "";
-      updateRoomContext(window.OthelloPeerGuard.isRoomId(roomParam) ? roomParam : "", params.get("join") === "1", true);
+      updateRoomContext(window.HiqriPeerGuard.isRoomId(roomParam) ? roomParam : "", params.get("join") === "1", true);
     }
 
     // 今のルームに合わせて URL を書きかえる（ページは開きなおさない）
@@ -566,7 +575,7 @@
       }
     }
 
-    var play = window.OthelloPlay.create(app, {
+    var play = window.HiqriPlay.create(app, {
       clearRematch: clearRematch,
       failed: failed,
       notifyJoined: notifyJoined,
@@ -909,7 +918,7 @@
             var roomId = ui.getRoomInput();
             if (!roomId) {
               setMessage("参加したいルームIDを入力してください。");
-            } else if (!window.OthelloPeerGuard.isRoomId(roomId)) {
+            } else if (!window.HiqriPeerGuard.isRoomId(roomId)) {
               setMessage("ルームIDは、英数字と「-」「_」だけです。もう一度たしかめてね。");
             } else if (roomId === app.roomId) {
               if (app.reconnecting) {
@@ -1090,5 +1099,5 @@
     };
   }
 
-  window.OthelloSession = { create: create };
+  window.HiqriSession = { create: create };
 }(window));

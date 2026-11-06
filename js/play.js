@@ -1,9 +1,9 @@
-// 対局の進め方（OthelloPlay）：始める・手を打つ・教養モードの問題・COM の手・相手との通信（届いた知らせ・再接続・再開）・再戦。
+// 対局の進め方（HiqriPlay）：始める・手を打つ・教養モードの問題・COM の手・相手との通信（届いた知らせ・再接続・再開）・再戦。
 // session.js が create(app, deps) で作り、ui.js のボタンから呼ばれる。盤の決まりは game.js、届いた中身の確かめは peer-guard.js
 (function (window) {
-  var Game = window.OthelloGame;
-  var Quiz = window.OthelloQuiz;
-  var Guard = window.OthelloPeerGuard;
+  var Game = window.HiqriGame;
+  var Quiz = window.HiqriQuiz;
+  var Guard = window.HiqriPeerGuard;
   var QUIZ_RESULT_MS = 900;
   var RECONNECT_TIMEOUT_MS = 8000;
   var RECONNECT_RETRY_MS = 1500;
@@ -1287,5 +1287,5 @@
     };
   }
 
-  window.OthelloPlay = { create: create };
+  window.HiqriPlay = { create: create };
 }(window));

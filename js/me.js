@@ -1,4 +1,4 @@
-// 見出しの本人のアイコン（OthelloMe）：ロゴの右に、本人の LINE のアイコン（なければ名前の頭の字）を出す。
+// 見出しの本人のアイコン（HiqriMe）：ロゴの右に、本人の LINE のアイコン（なければ名前の頭の字）を出す。
 // 出すのは Q キットの shared/line-me.js（window.QLineMe。つづく・しょくじ・キロっくと同じ見た目）。緑のふちはログイン中、灰色はまだ（ゲスト）。
 // 押したとき：ブラウザ版のゲストなら、はじめに出した「LINE 版で開く／ログインして遊ぶ」のシート（platform.js）。
 // ログイン中なら、だれでログインしているか・対戦相手に見えるもの・版のシート（ここ）。
@@ -121,7 +121,7 @@
 
   // 見出しにアイコンを出す（Q キットが読めないとき・LIFF ID がないときは何もしない）
   function mount() {
-    var Platform = window.OthelloPlatform;
+    var Platform = window.HiqriPlatform;
     var liffId = window.APP_CONFIG && window.APP_CONFIG.liffId;
     if (!window.QLineMe || !Platform || !liffId) {
       return null;
@@ -149,5 +149,5 @@
     return handle;
   }
 
-  window.OthelloMe = { mount: mount, rows: rows };
+  window.HiqriMe = { mount: mount, rows: rows };
 }(window, document));

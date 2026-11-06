@@ -1,8 +1,8 @@
-// 画面を描く（OthelloUI）：ルームの様子・始め方・対局の準備・プレイヤーのカード・盤・問題・START・結果。状態（app）を見て描くだけで、状態は変えない。
+// 画面を描く（HiqriUI）：ルームの様子・始め方・対局の準備・プレイヤーのカード・盤・問題・START・結果。状態（app）を見て描くだけで、状態は変えない。
 // session.js が create(document) で作り、render(app) で描きなおし、bind(handlers) でボタンをつなぐ
 (function (window, document) {
-  var Game = window.OthelloGame;
-  var RoomText = window.OthelloRoomText;
+  var Game = window.HiqriGame;
+  var RoomText = window.HiqriRoomText;
 
   // 要素の文字を変える（要素がなければ何もしない）
   function setText(element, value) {
@@ -42,7 +42,7 @@
 
   // 文字を HTML に入れても、タグとして動かない形にする（js/tex.js と同じものを使う）
   function esc(value) {
-    return window.OthelloTex.escapeHtml(value);
+    return window.HiqriTex.escapeHtml(value);
   }
 
   // 要素を出す・隠す
@@ -64,7 +64,7 @@
       return;
     }
     // 画像は LINE のプロフィール画像の URL だけ使う（ほかは頭文字を出す）
-    var url = window.OthelloPeerGuard.cleanPictureUrl(pictureUrl || "");
+    var url = window.HiqriPeerGuard.cleanPictureUrl(pictureUrl || "");
     element.style.backgroundImage = url ? ('url("' + url.replace(/["\\\n]/g, encodeURIComponent) + '")') : "none";
     element.textContent = url ? "" : (name || "?").charAt(0).toUpperCase();
   }
@@ -221,7 +221,7 @@
     function rulesText(app) {
       var sizeText = app.rules.size + "×" + app.rules.size;
       return app.rules.mode === "quiz" ?
-        "📚 教養 " + window.OthelloQuiz.describe(app.rules) + "・" + sizeText +
+        "📚 教養 " + window.HiqriQuiz.describe(app.rules) + "・" + sizeText +
           (app.rules.answerMode === "input" ? "・✏️入力" : "") +
           "・" + lifeLabel(app.rules.lives) + (app.rules.timeLimit ? "・⏱" + app.rules.timeLimit + "秒" : "") :
         "ふつう・" + sizeText;
@@ -344,7 +344,7 @@
       var isQuiz = app.rules.mode === "quiz";
       if (isQuiz && app.rules.picks.some(function (pick) { return pick.genre === "math"; })) {
         // 数学を選んだら、問題が出る前に数式の組版を読み込んでおく
-        window.OthelloTex.load();
+        window.HiqriTex.load();
       }
       setHidden(elements.ruleSetup, !canEditRules);
       setHidden(elements.quizRuleRows, !isQuiz);
@@ -364,7 +364,7 @@
         setPressed(button, Number(button.getAttribute("data-size")) === app.rules.size);
       });
       Array.prototype.forEach.call(elements.pickRows.querySelectorAll("[data-pick]"), function (button) {
-        setPressed(button, window.OthelloQuiz.hasPick(app.rules, button.getAttribute("data-pick")));
+        setPressed(button, window.HiqriQuiz.hasPick(app.rules, button.getAttribute("data-pick")));
       });
       // 対局後は、ルールの欄だけを出す（色・対戦相手は次の対局の準備で選ぶ）
       elements.hostSetupPanel.classList.toggle("is-post-game", isPostGame);
@@ -396,14 +396,14 @@
       setText(elements.quizWatchPillText, app.opponentQuiz && app.opponentQuiz.byCom ? "COM が回答中…" : "相手が回答中…");
       if (prompt && prompt !== renderedQuizPrompt) {
         renderedQuizPrompt = prompt;
-        setLabel(elements.quizGenre, (window.OthelloQuiz.findGenre(prompt.question.genre) || {}).iconName || "", (app.localTwoPlayer && prompt.color ? (prompt.color === Game.BLACK ? "⚫ 黒の人・" : "⚪ 白の人・") : "") +
+        setLabel(elements.quizGenre, (window.HiqriQuiz.findGenre(prompt.question.genre) || {}).iconName || "", (app.localTwoPlayer && prompt.color ? (prompt.color === Game.BLACK ? "⚫ 黒の人・" : "⚪ 白の人・") : "") +
           prompt.question.pickLabel + (prompt.attempt ? "・このマス" + (prompt.attempt + 1) + "問目" : ""));
-        window.OthelloTex.setText(elements.quizText, prompt.question.text, prompt.question.tex, rerenderQuiz);
+        window.HiqriTex.setText(elements.quizText, prompt.question.text, prompt.question.tex, rerenderQuiz);
         elements.quizChoices.innerHTML = prompt.question.choices.map(function (choice, index) {
           return '<button class="quiz-choice" type="button" data-choice="' + index + '"></button>';
         }).join("");
         Array.prototype.forEach.call(elements.quizChoices.children, function (button, index) {
-          window.OthelloTex.setChoice(button, prompt.question.choices[index], prompt.question.texChoices);
+          window.HiqriTex.setChoice(button, prompt.question.choices[index], prompt.question.texChoices);
         });
         setText(elements.quizResult, "");
         // 入力で答える問題は、選択肢の代わりに入力欄を出す
@@ -468,7 +468,7 @@
       setHidden(elements.startButton, !showStart);
       setHidden(elements.setupStartButton, !startInSetup);
       if (showStart) {
-        var rulesReady = window.OthelloQuiz.isReady(app.rules);
+        var rulesReady = window.HiqriQuiz.isReady(app.rules);
         var startLabel = !rulesReady ? (app.role === "host" ? "問題を選ぶと START できます" : "ホストが問題を選んでいます") :
           (app.opponentMode === "human" && app.localStartReady ? "準備OK・相手を待っています" : "▶ START");
         var startDisabled = !rulesReady || (app.opponentMode === "com" ? app.role !== "host" : !!app.localStartReady);
@@ -564,7 +564,7 @@
           // 4隅は取り合いになる大事なマスなので、問題の手がかりを出さず「？」にする
           var isCorner = (row === 0 || row === boardSize - 1) && (col === 0 || col === boardSize - 1);
           mark.textContent = isCorner ? "？" :
-            (window.OthelloQuiz.questionAt(app.rules, app.quizAttempts, app.quizRetries, row, col).mark || "");
+            (window.HiqriQuiz.questionAt(app.rules, app.quizAttempts, app.quizRetries, row, col).mark || "");
           button.appendChild(mark);
         }
 
@@ -585,7 +585,7 @@
         elements.sizeChoices.innerHTML = Game.BOARD_SIZES.map(function (size) {
           return chip(size + "×" + size, size, "data-size");
         }).join("");
-        elements.pickRows.innerHTML = window.OthelloQuiz.GENRES.map(function (genre) {
+        elements.pickRows.innerHTML = window.HiqriQuiz.GENRES.map(function (genre) {
           return '<div class="pick-row"><span class="pick-genre"><span class="ls-icon" data-icon="' + esc(genre.iconName) +
             '" aria-hidden="true"></span>' + esc(genre.label) + "</span>" +
             '<div class="ls-chips">' +
@@ -594,10 +594,10 @@
         }).join("");
         elements.ruleNormalButton.addEventListener("click", function () { handlers.onChangeRules({ mode: "normal" }); });
         elements.ruleQuizButton.addEventListener("click", function () { handlers.onChangeRules({ mode: "quiz" }); });
-        elements.lifeChoices.innerHTML = window.OthelloQuiz.LIFE_CHOICES.map(function (lives) {
+        elements.lifeChoices.innerHTML = window.HiqriQuiz.LIFE_CHOICES.map(function (lives) {
           return chip(lives ? "❤️" + lives : "なし", lives, "data-lives");
         }).join("");
-        elements.timeChoices.innerHTML = window.OthelloQuiz.TIME_CHOICES.map(function (seconds) {
+        elements.timeChoices.innerHTML = window.HiqriQuiz.TIME_CHOICES.map(function (seconds) {
           return chip(seconds ? seconds + "秒" : "なし", seconds, "data-time");
         }).join("");
         Array.prototype.forEach.call(elements.answerModeButtons, function (button) {
@@ -769,7 +769,7 @@
         setHidden(elements.roomActionRow, !app.roomId || isSolo);
         setHidden(elements.shareButton, !roomFlow.showShare);
         // LINE の友だちを選べるときは「LINEで招待」、ログインしていないブラウザ版などはリンクで招待（Platform.useLineWords）
-        var lineInvite = !window.OthelloPlatform || !window.OthelloPlatform.useLineWords || window.OthelloPlatform.useLineWords();
+        var lineInvite = !window.HiqriPlatform || !window.HiqriPlatform.useLineWords || window.HiqriPlatform.useLineWords();
         setLabel(elements.shareButton, lineInvite ? "message-circle" : "share", lineInvite ? "LINEで招待" : "招待を送る");
         setText(elements.newFriendRoomSub, lineInvite ? "LINEで招待する" : "リンクで招待する");
         // 結果を送るボタン：LINE なら「カードでおくるん」（LINE の緑）、そうでなければ「結果を送る」（端末の共有）
@@ -804,5 +804,5 @@
     return api;
   }
 
-  window.OthelloUI = { create: create };
+  window.HiqriUI = { create: create };
 }(window, document));

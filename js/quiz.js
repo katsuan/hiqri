@@ -1,4 +1,4 @@
-// 教養モードの問題（OthelloQuiz）：ジャンルとレベル・ルールの形・問題の読みこみ・マスごとの問題・COM の正解率・入力の答え合わせ。
+// 教養モードの問題（HiqriQuiz）：ジャンルとレベル・ルールの形・問題の読みこみ・マスごとの問題・COM の正解率・入力の答え合わせ。
 // マスごとの問題は「問題の種・マス・何回目の挑戦か」から決まるので、通信対戦でも両方の端末で同じ問題になる（問題そのものは送らない）。
 // main の流れでは app.js が load を呼び、play.js・ui.js・session.js が使う
 (function (window) {
@@ -214,7 +214,7 @@
     var input = rules || {};
     return {
       mode: input.mode === "quiz" ? "quiz" : "normal",
-      size: window.OthelloGame.normalizeSize(input.size),
+      size: window.HiqriGame.normalizeSize(input.size),
       picks: normalizePicks(input),
       lives: pickChoice(input.lives, LIFE_CHOICES, DEFAULT_LIVES),
       // 回答の形式："choice"（4択）/ "input"（文字で入力。入力に向かない問題は4択のまま）
@@ -757,7 +757,7 @@
     return Math.max(0.5, 0.8 - index * 0.08);
   }
 
-  window.OthelloQuiz = {
+  window.HiqriQuiz = {
     GENRES: GENRES,
     load: load,
     isReady: isReady,

@@ -1,4 +1,4 @@
-// LINE（LIFF）とブラウザのつなぎ（OthelloPlatform）：本人・ルームの URL・招待と結果を送る・コピー・版・開きなおし。
+// LINE（LIFF）とブラウザのつなぎ（HiqriPlatform）：本人・ルームの URL・招待と結果を送る・コピー・版・開きなおし。
 // session.js・ui.js から使う。送るカードの中身は js/card.js
 (function (window, document) {
   var identityPromise = null;
@@ -329,7 +329,7 @@
   function shareResult(info) {
     var text = "ひっくりの結果：" + info.myName + " " + info.mine + " - " + info.theirs + " " + info.opponentName;
     if (canPickTarget()) {
-      return liff.shareTargetPicker([window.OthelloCard.result(info)]).then(function (result) {
+      return liff.shareTargetPicker([window.HiqriCard.result(info)]).then(function (result) {
         return { status: result ? "shared" : "cancelled", message: result ? withSeason("結果を送りました。") : "送るのをやめました。", line: true };
       }).catch(function (error) {
         if (window.console) {
@@ -349,7 +349,7 @@
     return buildShareUrl(roomId, url).then(function (shareUrl) {
       if (canPickTarget()) {
         return liff.shareTargetPicker([
-          window.OthelloCard.invite(roomId, shareUrl)
+          window.HiqriCard.invite(roomId, shareUrl)
         ]).then(function (result) {
           if (result) {
             return { status: "shared", message: withSeason("招待を送りました。友だちの参加を待っています。") };
@@ -420,7 +420,7 @@
     window.location.href = url || window.location.href;
   }
 
-  window.OthelloPlatform = {
+  window.HiqriPlatform = {
     withSeason: withSeason,
     generateId: generateId,
     sanitizeForPeer: sanitizeForPeer,

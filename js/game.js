@@ -1,4 +1,4 @@
-// 盤のゲームの決まり（OthelloGame）：盤を作る・置けるマス・ひっくり返す・手番・終わりと勝ち負け。画面にも通信にも触らない。
+// 盤のゲームの決まり（HiqriGame）：盤を作る・置けるマス・ひっくり返す・手番・終わりと勝ち負け。画面にも通信にも触らない。
 // play.js・ui.js・peer-guard.js などから使う。node のテストでも動く
 (function (window) {
   // 盤面の大きさの初期値。教養モードでは 6 / 8 から選べる（最初の4つの石を中央に置くため偶数のみ）
@@ -293,7 +293,7 @@
     return best;
   }
 
-  window.OthelloGame = {
+  window.HiqriGame = {
     BOARD_SIZE: BOARD_SIZE,
     BOARD_SIZES: BOARD_SIZES,
     normalizeSize: normalizeSize,

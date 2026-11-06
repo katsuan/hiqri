@@ -1,10 +1,10 @@
-// 相手の端末・URL から届く中身を、使う前に確かめる（OthelloPeerGuard。形・範囲・ルール）。
+// 相手の端末・URL から届く中身を、使う前に確かめる（HiqriPeerGuard。形・範囲・ルール）。
 // play.js・session.js・ui.js から使う。画面に触らないので node のテスト（test/peer-guard.test.js）でも動く
 (function (window) {
   // 相手の端末・URL から届く中身を、使う前に確かめる（形・範囲・ルール）。
   // 画面に触らないので node のテスト（test/peer-guard.test.js）でも動かせる
-  var Game = window.OthelloGame;
-  var Quiz = window.OthelloQuiz;
+  var Game = window.HiqriGame;
+  var Quiz = window.HiqriQuiz;
   var NAME_MAX = 40;
   var MESSAGE_MAX = 200;
   var TYPED_MAX = 40;
@@ -195,5 +195,5 @@
     cleanQuizChoice: cleanQuizChoice
   };
 
-  window.OthelloPeerGuard = Guard;
+  window.HiqriPeerGuard = Guard;
 }(window));

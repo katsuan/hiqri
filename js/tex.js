@@ -1,4 +1,4 @@
-// 数式の組版（OthelloTex。KaTeX）：数式の問題が出たときだけ読みこみ、読めるまで・読めないときはふつうの文字で出す。
+// 数式の組版（HiqriTex。KaTeX）：数式の問題が出たときだけ読みこみ、読めるまで・読めないときはふつうの文字で出す。
 // ui.js が問題を描くときに使う
 (function (window, document) {
   var KATEX_VERSION = "0.16.11";
@@ -90,7 +90,7 @@
     element.textContent = text;
   }
 
-  window.OthelloTex = {
+  window.HiqriTex = {
     escapeHtml: escapeHtml,
     load: load,
     isReady: isReady,

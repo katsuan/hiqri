@@ -3,7 +3,7 @@
   // 招待カード：ロゴ・アイコンと同じ盤の緑。上にロゴ入りの画像（assets/ogp.png）、ボタンも緑
   var BRAND_GREEN = "#1F7A45";
   var BRAND_DARK = "#14542E";
-  var SITE_URL = "https://katsuan.github.io/line-p2p-othello/";
+  var SITE_URL = "https://katsuan.github.io/hiqri/";
 
   // 招待のカード：ロゴの画像・ルーム ID（コピーできる）・「このルームに参加」
   function invite(roomId, shareUrl) {
@@ -153,5 +153,5 @@
     };
   }
 
-  window.OthelloCard = { invite: invite, result: result };
+  window.HiqriCard = { invite: invite, result: result };
 }(window));

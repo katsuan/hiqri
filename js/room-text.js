@@ -1,7 +1,7 @@
-// ルームと対局の様子から、画面に出す文を決める（OthelloRoomText）：カードの見出し・名前・様子、ルームの欄、START・結果のひとこと。
+// ルームと対局の様子から、画面に出す文を決める（HiqriRoomText）：カードの見出し・名前・様子、ルームの欄、START・結果のひとこと。
 // 状態（app）を読むだけで、画面にも状態にも触らない。ui.js が使う。node のテストでも動く（test/room-text.test.js）
 (function (window) {
-  var Game = window.OthelloGame;
+  var Game = window.HiqriGame;
 
   // スマホのせまい画面か
   function isCompactMobile() {
@@ -398,7 +398,7 @@
       "相手が黒です。2人とも START を押すと対局が始まります。";
   }
 
-  window.OthelloRoomText = {
+  window.HiqriRoomText = {
     isCompactMobile: isCompactMobile,
     isHumanP2PSetup: isHumanP2PSetup,
     localName: localName,

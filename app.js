@@ -3,8 +3,8 @@
   // 使い方の案内を出し（はじめての人だけ）、問題を読んでからゲームを始める
   function start() {
     // 見出しのロゴの右に、本人の LINE のアイコン（js/me.js。Q キットの shared/line-me.js）
-    if (window.OthelloMe) {
-      window.OthelloMe.mount();
+    if (window.HiqriMe) {
+      window.HiqriMe.mount();
     }
     // はじめて開いた人にだけ、短い使い方（Q キット。「わかった」で消え、この端末では二度と出さない）
     if (window.LineShareUI && typeof window.LineShareUI.firstTip === "function") {
@@ -16,8 +16,8 @@
       ], document.querySelector(".board-layout"));
     }
     // 問題（questions/*.json）を読み込んでから始める。読み込めなくても数学だけで遊べる
-    window.OthelloQuiz.load().then(function () {
-      window.OthelloSession.create().bootstrap();
+    window.HiqriQuiz.load().then(function () {
+      window.HiqriSession.create().bootstrap();
     });
   }
 
