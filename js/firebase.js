@@ -5,7 +5,7 @@
 
   // このアプリは script 読み込み版の Firebase SDK を使うため、
   // ここでは Web アプリ設定値だけを保持します。
-  window.APP_CONFIG.liffId = window.APP_CONFIG.liffId || "2009927876-PcLT1IYA";
+  window.APP_CONFIG.liffId = window.APP_CONFIG.liffId || "2012187502-gUp90W4L";
   window.APP_CONFIG.firebase = window.APP_CONFIG.firebase || {
     apiKey: "AIzaSyDsgzpMW7l9vI0o39OQ5RvBvBk-lh6oNs4", // qcheck-ok: S1 Firebase のウェブ用の鍵（画面に置く前提。守りは Firestore のルール）
     authDomain: "liff-p2p.firebaseapp.com",
