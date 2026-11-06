@@ -1,5 +1,5 @@
 assets/icons/*.svg は Lucide（https://lucide.dev）の線アイコン（languages・globe・calculator・scroll・book-open）です。
-Q キット（line-share の shared/icons/）にまだない形だけを、ひっくりの中に置いています。Q キットに入ったら、そちらに替えます。
+Q キット（oqrn の shared/icons/）にまだない形だけを、ひっくりの中に置いています。Q キットに入ったら、そちらに替えます。
 
 ISC License
 

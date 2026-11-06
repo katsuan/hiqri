@@ -26,7 +26,7 @@
   <meta property="og:locale" content="ja_JP">
   <meta name="twitter:card" content="summary_large_image">
   <!-- Q キット（おくるんの共通部品）。色と字は css/page.css の :root で、ひっくりの緑に -->
-  <link rel="stylesheet" href="https://katsuan.github.io/line-share/shared/ui.css?v=202610261000">
+  <link rel="stylesheet" href="https://katsuan.github.io/oqrn/shared/ui.css?v=202610261000">
   <link rel="stylesheet" href="style.css?v=202611012034">
 </head>
 <body class="boot-loading">
@@ -298,7 +298,7 @@
 
       </aside>
     </section>
-    <!-- 「📤 ひっくりを紹介する」：おくるんで紹介カードを送る窓口（line-share/shared/tool-share.js。中身は line-share/data/hub-links.json） -->
+    <!-- 「📤 ひっくりを紹介する」：おくるんで紹介カードを送る窓口（oqrn/shared/tool-share.js。中身は oqrn/data/hub-links.json） -->
     <div data-tool-share></div>
   </div>
 
@@ -322,11 +322,11 @@
   <script src="js/play.js?v=202611012034"></script>
   <script src="js/session.js?v=202611012034"></script>
   <script src="app.js?v=202611012034"></script>
-  <script src="https://katsuan.github.io/line-share/shared/ui.js" defer></script>
-  <script src="https://katsuan.github.io/line-share/shared/liff.js" defer></script>
+  <script src="https://katsuan.github.io/oqrn/shared/ui.js" defer></script>
+  <script src="https://katsuan.github.io/oqrn/shared/liff.js" defer></script>
   <!-- 見出しの右の本人のアイコン（つづく・しょくじ・キロっくと同じ。Q キット。window.QLineMe。app.js が DOMContentLoaded で js/me.js から使う） -->
-  <script src="https://katsuan.github.io/line-share/shared/line-me.js?v=202610262300" defer></script>
-  <script src="https://katsuan.github.io/line-share/shared/tool-share.js" data-tool="hiqri" defer></script>
+  <script src="https://katsuan.github.io/oqrn/shared/line-me.js?v=202610262300" defer></script>
+  <script src="https://katsuan.github.io/oqrn/shared/tool-share.js" data-tool="hiqri" defer></script>
 <!-- 電波がなくても開けるように（sw.js） -->
 <script>if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").catch(() => {});</script>
 </body>

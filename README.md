@@ -2,9 +2,9 @@
 
 LINE で友だちと、石をひっくり返して対戦する盤のゲーム（LINE がなくてもリンクで遊べる）。名前は「ひっくり」（石をひっくり返す）。英字は HiQRi（おくるん＝OQRN・キロっく＝kiloQ と同じ作り方で、「く」を Q にする。Q の後ろも「Ri」と大文字で、ロゴは Hi を黒・Ri を白の石の色に分ける）。「オセロ」は登録商標なので、画面・招待カードの名前は「ひっくり」にする。
 
-アイコン（`assets/icon.svg`・`icon-32.png`・`apple-touch-icon.png`・`icon-512.png`・`icon-maskable-512.png`）・横長のロゴ（`assets/logo.svg`）・共有したときの画像（`assets/ogp.png`）は `python3 tools/icon.py` で作る（図形を描く部分は、となりのおくるん（`~/GitHub/q-oqrn`。GitHub のリポジトリ名は line-share）の `tools/brandkit.py`）。盤の緑にうっすら盤の線。Q の輪は白と黒の2本の矢印が追いかけ合う「入れ替え」の矢印。Q のしっぽは、輪の中から外へ斜めに刺さって突き抜ける石（少しだけ上から見た円盤を細長く。上の面が白、厚みが黒）で、O に棒が刺さった Q の形。黒い矢印はこの石の下から出る。ホーム画面に追加したとき用に `manifest.webmanifest`。
+アイコン（`assets/icon.svg`・`icon-32.png`・`apple-touch-icon.png`・`icon-512.png`・`icon-maskable-512.png`）・横長のロゴ（`assets/logo.svg`）・共有したときの画像（`assets/ogp.png`）は `python3 tools/icon.py` で作る（図形を描く部分は、となりのおくるん（`~/GitHub/q-oqrn`。GitHub のリポジトリ名は oqrn）の `tools/brandkit.py`）。盤の緑にうっすら盤の線。Q の輪は白と黒の2本の矢印が追いかけ合う「入れ替え」の矢印。Q のしっぽは、輪の中から外へ斜めに刺さって突き抜ける石（少しだけ上から見た円盤を細長く。上の面が白、厚みが黒）で、O に棒が刺さった Q の形。黒い矢印はこの石の下から出る。ホーム画面に追加したとき用に `manifest.webmanifest`。
 
-おくるんのトップの「ほかのツール」（line-share の `data/hub-links.json`）には「ひっくり 〜HiQRi〜」として、このアイコン付きで載せている。
+おくるんのトップの「ほかのツール」（oqrn の `data/hub-links.json`）には「ひっくり 〜HiQRi〜」として、このアイコン付きで載せている。
 
 
 LIFF、Firebase Firestore、PeerJS を使った、2 人で対戦する盤のゲームです。
@@ -148,7 +148,7 @@ LINE で遊ぶのが主な入り方（招待・名前とアイコン）。LINE �
 
 ## CSS の責務
 
-部品（見出しの行・カード・チップ・入力欄・ボタン・開閉・問題などのシート・トースト）は、おくるんの Q キット（`https://katsuan.github.io/line-share/shared/ui.css`・`ui.js`。使い方はおくるんの README の「Q キット」）を使います。ひっくりの CSS には、ひっくりの色と字（`:root` の `--ls-accent` など。緑 #1F7A45・濃い緑 #14542E）と、ひっくりにしかない見た目だけを置きます。
+部品（見出しの行・カード・チップ・入力欄・ボタン・開閉・問題などのシート・トースト）は、おくるんの Q キット（`https://katsuan.github.io/oqrn/shared/ui.css`・`ui.js`。使い方はおくるんの README の「Q キット」）を使います。ひっくりの CSS には、ひっくりの色と字（`:root` の `--ls-accent` など。緑 #1F7A45・濃い緑 #14542E）と、ひっくりにしかない見た目だけを置きます。
 
 - `style.css`
   - 入口。下の2つを `@import` で読む
@@ -166,7 +166,7 @@ LINE の中のブラウザが古い `index.html` を覚えていることがあ�
 - `js/main.js` → `js/card.js` と `app.js` を読む
 - `css/styles.css` → `css/page.css` を読む
 
-公開は GitHub Actions（`.github/workflows/pages.yml`。中身は Q 共通の line-share の `q-pages.yml`）。push すると、テストと check-code が通ったときだけ Pages に出す。読みこむ JS・CSS の `?v=` は公開のときに付くので、手で付けなくてよい。
+公開は GitHub Actions（`.github/workflows/pages.yml`。中身は Q 共通の oqrn の `q-pages.yml`）。push すると、テストと check-code が通ったときだけ Pages に出す。読みこむ JS・CSS の `?v=` は公開のときに付くので、手で付けなくてよい。
 
 ## 設定箇所
 
@@ -195,7 +195,7 @@ GitHub Actions 配信では `GITHUB_SHA` を使って自動更新されます。
 
 ## GitHub Pages
 
-main に push すると `.github/workflows/pages.yml`（中身は Q 共通の `katsuan/line-share` の `q-pages.yml`）が動き、テストと check-code が通ったときだけ、版情報と問題の一覧を作り、js / css の URL に `?v=` を付けて Pages に出します。落ちたら出しません。`?v=` は手で付けなくてかまいません。
+main に push すると `.github/workflows/pages.yml`（中身は Q 共通の `katsuan/oqrn` の `q-pages.yml`）が動き、テストと check-code が通ったときだけ、版情報と問題の一覧を作り、js / css の URL に `?v=` を付けて Pages に出します。落ちたら出しません。`?v=` は手で付けなくてかまいません。
 
 ## Firebase 利用方針
 
@@ -218,4 +218,4 @@ Firestore のルール（`firestore.rules`）は、ルーム ID を知ってい�
 
 ## 紹介の窓口
 
-「📤 ひっくりを紹介する」（ページのいちばん下）は、おくるんの `shared/tool-share.js`（`data-tool="hiqri"`）。押すとおくるんで盤の緑の紹介カードを作って LINE に送れる（リンクのシェアも選べる）。中身は line-share の `data/hub-links.json` の `key: "hiqri"`。
+「📤 ひっくりを紹介する」（ページのいちばん下）は、おくるんの `shared/tool-share.js`（`data-tool="hiqri"`）。押すとおくるんで盤の緑の紹介カードを作って LINE に送れる（リンクのシェアも選べる）。中身は oqrn の `data/hub-links.json` の `key: "hiqri"`。
