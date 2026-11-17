@@ -169,7 +169,7 @@
   font-size: clamp(1.8rem, 6vw, 2.8rem);
   line-height: 0.95;
   letter-spacing: 0.08em;
-  font-weight: 800;
+  font-weight: 700;
   color: #203024;
 }
 
@@ -380,7 +380,7 @@
   width: 2ch;
   text-align: right;
   font-size: 1rem;
-  font-weight: 800;
+  font-weight: 700;
   font-variant-numeric: tabular-nums;
   color: #203024;
 }
@@ -493,7 +493,7 @@
   font-size: clamp(2rem, 7vw, 3.1rem);
   line-height: 0.95;
   letter-spacing: 0.08em;
-  font-weight: 800;
+  font-weight: 700;
   color: #203024;
 }
 
@@ -519,7 +519,7 @@
 .result-scoreline {
   color: #203024;
   font-size: 1.02rem;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .result-actions {
@@ -642,7 +642,7 @@
 
 .setup-heading {
   font-size: 1rem;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 /* 準備のいちばん下に START（盤面までスクロールしなくても始められる） */
@@ -650,7 +650,7 @@
   min-height: 52px;
   border-radius: 16px;
   font-size: 1.1rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.08em;
 }
 
@@ -717,7 +717,7 @@
 
 .quiz-text {
   font-size: 1.1rem;
-  font-weight: 800;
+  font-weight: 700;
   line-height: 1.5;
 }
 
@@ -757,7 +757,7 @@
 
 .quiz-result {
   min-height: 1.4em;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .quiz-result.is-correct {
@@ -789,7 +789,7 @@
   justify-content: space-between;
   gap: 8px;
   font-size: 0.85rem;
-  font-weight: 800;
+  font-weight: 700;
   color: #2f6b4a;
 }
 
@@ -971,7 +971,7 @@
   border-radius: 999px;
   background: rgba(29, 42, 34, 0.08);
   font-size: 0.85rem;
-  font-weight: 800;
+  font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
 

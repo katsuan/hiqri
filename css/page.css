@@ -149,7 +149,7 @@ body.is-lobby .board-shell {
   background: rgba(29, 42, 34, 0.07);
   color: var(--ls-subtext);
   font-size: 0.72rem;
-  font-weight: 800;
+  font-weight: 700;
   white-space: nowrap;
 }
 
@@ -250,7 +250,7 @@ body.is-lobby .board-shell {
   align-items: center;
   gap: 8px; /* 線アイコンと字の間 */
   font-size: 1rem;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 /* せまい画面（320px など）では、名前が2行に折れないよう、アイコンと字の間を詰める */
