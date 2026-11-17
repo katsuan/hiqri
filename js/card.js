@@ -1,6 +1,7 @@
 // LINE に送るカード（招待・対局の結果）。どちらもロゴと同じ盤の緑。ボタンは画面を開く・コピーだけ（あとで押されても困らない）
 (function (window) {
   // 招待カード：ロゴ・アイコンと同じ盤の緑。上にロゴ入りの画像（assets/ogp.png）、ボタンも緑
+  var N = window.HiqriNames;
   var BRAND_GREEN = "#1F7A45";
   var BRAND_DARK = "#14542E";
   var SITE_URL = "https://katsuan.github.io/hiqri/";
@@ -9,7 +10,7 @@
   function invite(roomId, shareUrl) {
     return {
       type: "flex",
-      altText: "ひっくりの招待が届いています。ルームID: " + roomId,
+      altText: N.app + "の招待が届いています。ルームID: " + roomId,
       contents: {
         type: "bubble",
         size: "kilo",
@@ -19,8 +20,8 @@
           paddingAll: "14px",
           background: { type: "linearGradient", angle: "135deg", startColor: BRAND_GREEN, endColor: BRAND_DARK },
           contents: [
-            { type: "text", text: "ひっくりで対戦しよう", weight: "bold", size: "lg", color: "#FFFFFF" },
-            { type: "text", text: "〜HiQRi〜 LINE の友だちと石をひっくり返して対戦", size: "xxs", color: "#D8EEDF", margin: "xs", wrap: true }
+            { type: "text", text: N.app + "で対戦しよう", weight: "bold", size: "lg", color: "#FFFFFF" },
+            { type: "text", text: "〜" + N.en + "〜 LINE の友だちと石をひっくり返して対戦", size: "xxs", color: "#D8EEDF", margin: "xs", wrap: true }
           ]
         },
         hero: {
@@ -115,7 +116,7 @@
     };
     return {
       type: "flex",
-      altText: "ひっくりの結果：" + info.myName + " " + info.mine + " - " + info.theirs + " " + info.opponentName,
+      altText: N.app + "の結果：" + info.myName + " " + info.mine + " - " + info.theirs + " " + info.opponentName,
       contents: {
         type: "bubble",
         size: "kilo",
@@ -126,7 +127,7 @@
           background: { type: "linearGradient", angle: "135deg", startColor: BRAND_GREEN, endColor: BRAND_DARK },
           contents: [
             { type: "text", text: title, weight: "bold", size: "lg", color: "#FFFFFF" },
-            { type: "text", text: "〜HiQRi〜 ひっくり返せ、その一手", size: "xxs", color: "#D8EEDF", margin: "xs" }
+            { type: "text", text: "〜" + N.en + "〜 " + N.copy, size: "xxs", color: "#D8EEDF", margin: "xs" }
           ]
         },
         body: {
@@ -146,7 +147,7 @@
           layout: "vertical",
           paddingAll: "12px",
           contents: [
-            { type: "button", style: "primary", color: BRAND_GREEN, height: "sm", action: { type: "uri", label: "ひっくりで対戦する", uri: appUrl } }
+            { type: "button", style: "primary", color: BRAND_GREEN, height: "sm", action: { type: "uri", label: N.app + "で対戦する", uri: appUrl } }
           ]
         }
       }

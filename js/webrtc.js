@@ -63,7 +63,7 @@
       return servers.length ? servers : null;
     }).catch(function (error) {
       if (window.console) {
-        window.console.warn("[ひっくり] 中継の接続情報を読めませんでした", error);
+        window.console.warn("[" + window.HiqriNames.app + "] 中継の接続情報を読めませんでした", error);
       }
       return null;
     });

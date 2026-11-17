@@ -72,7 +72,7 @@
     var title = document.createElement("p");
     title.className = "ls-sheet-title";
     title.id = "meSheetTitle";
-    title.textContent = st.loggedIn && st.me && st.me.name ? st.me.name + " さん" : "ひっくり";
+    title.textContent = st.loggedIn && st.me && st.me.name ? st.me.name + " さん" : window.HiqriNames.app;
     head.append(avatarEl(st.me), title);
     var list = document.createElement("ul");
     list.className = "qme-rows";

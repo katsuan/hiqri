@@ -171,7 +171,7 @@
     // 失敗の知らせ：画面にはやさしい言葉だけ出し、くわしい中身はコンソールに残す
     function failed(text, error) {
       if (window.console && error) {
-        window.console.warn("[ひっくり] " + text, error);
+        window.console.warn("[" + window.HiqriNames.app + "] " + text, error);
       }
       return text;
     }
@@ -569,7 +569,7 @@
         window.document.addEventListener("visibilitychange", restore);
         try {
           if (window.Notification && window.Notification.permission === "granted") {
-            new window.Notification("ひっくり", { body: text.replace("🎉 ", ""), icon: "assets/apple-touch-icon.png" });
+            new window.Notification(window.HiqriNames.app, { body: text.replace("🎉 ", ""), icon: "assets/apple-touch-icon.png" });
           }
         } catch (error) {}
       }

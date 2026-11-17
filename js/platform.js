@@ -1,6 +1,7 @@
 // LINE（LIFF）とブラウザのつなぎ（HiqriPlatform）：本人・ルームの URL・招待と結果を送る・コピー・版・開きなおし。
 // session.js・ui.js から使う。送るカードの中身は js/card.js
 (function (window, document) {
+  var N = window.HiqriNames;
   var identityPromise = null;
   // LIFF を起こし終えた（起こせなかった・手元で試すときも）約束。見出しの本人のアイコン（js/me.js）が待つ。LIFF を2回起こさない
   var liffDone = function () {};
@@ -327,18 +328,18 @@
 
   // 対局の結果をカードで送る。LINE の友だちを選べないときは、端末の共有で（なければコピー）。返すもの：{ status, message, line }
   function shareResult(info) {
-    var text = "ひっくりの結果：" + info.myName + " " + info.mine + " - " + info.theirs + " " + info.opponentName;
+    var text = N.app + "の結果：" + info.myName + " " + info.mine + " - " + info.theirs + " " + info.opponentName;
     if (canPickTarget()) {
       return liff.shareTargetPicker([window.HiqriCard.result(info)]).then(function (result) {
         return { status: result ? "shared" : "cancelled", message: result ? withSeason("結果を送りました。") : "送るのをやめました。", line: true };
       }).catch(function (error) {
         if (window.console) {
-          window.console.warn("[ひっくり] 結果を送れませんでした", error);
+          window.console.warn("[" + N.app + "] 結果を送れませんでした", error);
         }
         return copyInstead(text, "送れなかったので、結果をコピーしました。", "結果を長押ししてコピーしてね");
       });
     }
-    return shareByDevice({ title: "ひっくり", text: text, url: getAppBaseUrl() }, withSeason("結果を送りました。"), "送るのをやめました。", function () {
+    return shareByDevice({ title: N.app, text: text, url: getAppBaseUrl() }, withSeason("結果を送りました。"), "送るのをやめました。", function () {
       return copyInstead(text, "結果をコピーしました。メッセージやメールに貼って送れます。", "結果を長押ししてコピーしてね");
     });
   }
@@ -357,13 +358,13 @@
           return { status: "cancelled", message: "招待を送るのをやめました。" };
         }).catch(function (error) {
           if (window.console) {
-            window.console.warn("[ひっくり] 招待を送れませんでした", error);
+            window.console.warn("[" + N.app + "] 招待を送れませんでした", error);
           }
           return copyInstead(shareUrl, "送れなかったので、招待のリンクをコピーしました。", "招待のリンクを長押ししてコピーしてね");
         });
       }
 
-      return shareByDevice({ title: "ひっくり", text: "ひっくりで対戦しよう", url: shareUrl },
+      return shareByDevice({ title: N.app, text: N.app + "で対戦しよう", url: shareUrl },
         withSeason("招待を送りました。友だちの参加を待っています。"), "招待を送るのをやめました。", function () {
           return copyRoomLink(shareUrl);
         });
